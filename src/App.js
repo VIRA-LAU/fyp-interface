@@ -9,7 +9,8 @@ import {
 } from "firebase/auth"
 import Login from "./Login";
 import Home from "./Home";
-
+import "swiper/swiper-bundle.min.css";
+import "swiper/swiper.min.css";
 import './App.css'
 
 const App = () => {
@@ -84,6 +85,7 @@ const App = () => {
         authListener();
     }, []);
 
+    console.log(user)
 
     return (
         <div className="App">

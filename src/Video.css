@@ -1,0 +1,7 @@
+.video-page-container{
+    padding: 5% 10%
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border: hidden !important;
+}
