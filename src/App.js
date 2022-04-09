@@ -12,6 +12,10 @@ import Home from "./Home";
 import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import './App.css'
+import {Route, Routes} from "react-router-dom";
+import Layout from "./layouts";
+import Stats from "./components/Stats";
+
 
 const App = () => {
     const auth = getAuth(fire);
@@ -89,8 +93,15 @@ const App = () => {
 
     return (
         <div className="App">
-            {user ? (
-                <Home handleLogout={handleLogout}/>
+            {user ?  (
+
+                <Routes>
+
+
+                    <Route index element={<Home handleLogout={handleLogout} />} />
+                    <Route path="/stats" element={<Stats />} />
+
+                </Routes>
             ) : (
                 <Login
                     email={email}
