@@ -3,8 +3,9 @@ import ImageUpload from '../ImageUpload';
 import { getFirestore, addDoc, collection } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import fire from "../../fire";
+import axios from "axios";
 const Players = () => {
-
+    const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/players"
     const db = getFirestore(fire);
 
     //Create a root reference
@@ -44,10 +45,21 @@ const Players = () => {
             console.log(progress);
         }, (err)=> console.log(err),
         async () => {
+
             const response = await getDownloadURL(uploadTask.snapshot.ref)
 
-            console.log(response);
-
+            console.log(response)
+            const payload = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                imageUrl: response
+            }
+            console.log("payload", payload)
+            axios.post(url, payload)
+                .then(function (response) {
+                    console.log(response);
+                })
                 // getDownloadURL(uploadTask.snapshot.ref)
                 //     .then((url) =>
                 //         console.log(url))
