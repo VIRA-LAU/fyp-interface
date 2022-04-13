@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 import ReactPlayer from "react-player";
 import SwiperCore, {EffectCoverflow, Navigation, Pagination, Autoplay} from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {IMAGES} from "./utils/constants/images";
+import {IMAGES} from "../../utils/constants/images";
 import {Autocomplete, Grid, TextField, Typography, useMediaQuery, useTheme} from "@mui/material";
-import Slide from "./components/Slide";
+import Slide from "../Slide";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -12,14 +12,16 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
 import './Video.css';
-import {VIDEOS} from "./utils/constants/videos";
+import {VIDEOS} from "../../utils/constants/videos";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import axios from "axios";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
 
 function Video() {
     const theme = useTheme()
+    const [profiles, setProfiles]=useState();
 
     const isSmall = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -55,7 +57,12 @@ function Video() {
         setVideoFilePath(URL.createObjectURL(event.target.files[0]));
     };
 
-    useEffect(() => {
+
+
+    useEffect(async () => {
+        const response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/players");
+        setProfiles(response);
+
         if(selected[0]!==0){
             setVideoFilePath(VIDEOS[selected[0]-1])
         }
@@ -64,7 +71,37 @@ function Video() {
         }
     },[selected])
 
-    console.log(selectedPlayer)
+
+   // console.log(selectedPlayer)
+
+    const renderSwiper = () =>{
+      //  console.log(profiles)
+        if(profiles) {
+            return <>
+                {profiles.data.map(({firstName, lastName, imageUrl, playerId}, i) => {
+              //      console.log(imageUrl)
+                    return (
+
+                        <SwiperSlide key={i}>
+                            <Slide src={imageUrl} name={firstName+ " " + lastName} id={playerId}/>
+                        </SwiperSlide>
+                    );
+                })}
+            </>;
+
+        } else {
+            return <>
+                {IMAGES.map(({src, name, id}, i) => {
+                    return (
+                        <SwiperSlide key={i}>
+                            <Slide src={src} name={name} id={id}/>
+                        </SwiperSlide>
+                    );
+                })}
+            </>;
+        }
+    }
+
     return (
         <div className={"video-page-container"}>
             {/*<input className="player" type="file" onChange={handleVideoUpload} />*/}
@@ -77,7 +114,7 @@ function Video() {
                 height={300}
                 loop={true}
                 centeredSlides={true}
-                slidesPerView={isSmall? "1":"3"}
+                slidesPerView={isSmall ? "1" : "3"}
                 coverflowEffect={{
                     rotate: 50,
                     stretch: 0,
@@ -89,27 +126,22 @@ function Video() {
                 // navigation={true}
                 className="mySwiper"
             >
-                {IMAGES.map(({src, name, id}, i) => {
-                    return (
-                        <SwiperSlide key={i}>
-                            <Slide src={src} name={name} id={id}/>
-                        </SwiperSlide>
-                    );
-                })}
+
+                {renderSwiper()}
             </Swiper>
             <div
                 style={{
-                    padding:'10% 0'
+                    padding: '10% 0'
                 }}
             >
                 <div style={{
-                    display:'flex'
+                    display: 'flex'
                 }}>
-                    <Box sx={{ display:'flex', minWidth:'150px',overflowY: 'auto', color:'white' }}>
+                    <Box sx={{display: 'flex', minWidth: '150px', overflowY: 'auto', color: 'white'}}>
                         <TreeView
                             aria-label="controlled"
-                            defaultCollapseIcon={<ExpandMoreIcon />}
-                            defaultExpandIcon={<ChevronRightIcon />}
+                            defaultCollapseIcon={<ExpandMoreIcon/>}
+                            defaultExpandIcon={<ChevronRightIcon/>}
                             expanded={expanded}
                             selected={selected}
                             onNodeToggle={handleToggle}
@@ -118,8 +150,8 @@ function Video() {
                         >
                             <TreeItem nodeId="0" label="Videos">
                                 {
-                                    VIDEOS.map(({name,videos}, index) =>
-                                        <TreeItem nodeId={index+1} label={name} />
+                                    VIDEOS.map(({name, videos}, index) =>
+                                        <TreeItem nodeId={index + 1} label={name}/>
                                     )
                                 }
                             </TreeItem>
@@ -128,9 +160,9 @@ function Video() {
                     {
                         videoFilePath &&
                         <div style={{
-                            margin:'0 auto',
+                            margin: '0 auto',
                         }}>
-                            <Typography textAlign={"center"} sx={{color:'white'}} marginRight={"150px"} variant={"h5"}>
+                            <Typography textAlign={"center"} sx={{color: 'white'}} marginRight={"150px"} variant={"h5"}>
                                 The following video is being played: {videoFilePath.name}
                             </Typography>
                         </div>
@@ -151,7 +183,8 @@ function Video() {
                                                 variant={"h5"}>
                                         Base Video
                                     </Typography>
-                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls url={videoFilePath.videos.preprocessing.path}/>
+                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                                 url={videoFilePath.videos.preprocessing.path}/>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Typography textAlign={"center"}
@@ -161,7 +194,8 @@ function Video() {
                                                 variant={"h5"}>
                                         Detection and Tracking
                                     </Typography>
-                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls url={videoFilePath.videos.tracking.path}/>
+                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                                 url={videoFilePath.videos.tracking.path}/>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Typography textAlign={"center"}
@@ -169,9 +203,10 @@ function Video() {
                                                     color: 'white'
                                                 }}
                                                 variant={"h5"}>
-                                       Action Classification
+                                        Action Classification
                                     </Typography>
-                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls url={videoFilePath.videos.classification.path}/>
+                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                                 url={videoFilePath.videos.classification.path}/>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <div>
@@ -233,6 +268,7 @@ function Video() {
 
                                                                         }}
                                                                         disabled
+                                                                        // Get person ID from endpoint
                                                                         value={videoFilePath.personId}
                                                                     />
                                                                 </div>
@@ -244,7 +280,7 @@ function Video() {
                                                                                }}
                                                             />
                                                             <div style={{
-                                                                minWidth: '45%' ,
+                                                                minWidth: '45%',
                                                                 maxWidth: '45%'
                                                             }}>
                                                                 <div style={{
@@ -268,19 +304,19 @@ function Video() {
 
                                                                     <Autocomplete
                                                                         onInputChange={(event, newInputValue) => {
-                                                                            console.log(newInputValue,event)
+                                                                            console.log(newInputValue, event)
                                                                             // setAmount(newInputValue);
                                                                         }}
-                                                                        options={IMAGES}
+                                                                        options={profiles.data}
                                                                         fullWidth
-                                                                        getOptionLabel={(e) => e.name}
+                                                                        getOptionLabel={(e) => e.firstName + " " + e.lastName}
                                                                         filterSelectedOptions
                                                                         renderInput={(params) => (
 
                                                                             <TextField
                                                                                 {...params}
                                                                                 variant="outlined"
-                                                                                    style={{
+                                                                                style={{
                                                                                     borderBottom: 'none',
                                                                                     maxWidth: '100%',
                                                                                     alignSelf: 'center',
@@ -298,7 +334,7 @@ function Video() {
                                                         <Button
                                                             variant="contained"
                                                             style={{
-                                                                minWidth:  '45%',
+                                                                minWidth: '45%',
                                                                 maxWidth: '45%',
                                                                 alignSelf: 'center',
                                                                 marginTop: '25px',

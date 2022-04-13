@@ -1,5 +1,5 @@
 import React from "react";
-import Video from "./Video";
+import Video from "./components/Video/Video";
 import { useNavigate } from "react-router-dom";
 
 const Home = ({handleLogout}) => {
@@ -10,6 +10,7 @@ const Home = ({handleLogout}) => {
                 <h2>Welcome</h2>
                 <button onClick={handleLogout}>Logout</button>
                 <button onClick={ () => navigate("../stats", { replace: true })}>Stats</button>
+                <button onClick={ () => navigate("../players", { replace: true })}>Players</button>
                 <button>Classify</button>
             </nav>
             <Video />
