@@ -1,5 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Button} from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faPencil} from "@fortawesome/free-solid-svg-icons/faPencil";
 
 
 function ImageUpload(props){
@@ -28,7 +30,6 @@ function ImageUpload(props){
 
     function pickedImageHandler(){
         filePickerRef.current.click();
-
     }
 
     return(
@@ -52,7 +53,9 @@ function ImageUpload(props){
                 <div>
                     {previewUrl && (
                     <div className="center">
-                        <Button></Button>
+                        <Button onClick={pickedImageHandler}>
+                            <FontAwesomeIcon icon={faPencil} />
+                        </Button>
                     </div>
                     )}
                 </div>

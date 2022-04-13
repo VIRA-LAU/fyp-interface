@@ -1,5 +1,5 @@
 import React from "react";
-import Video from "./Video";
+import Video from "./components/Video/Video";
 import { useNavigate } from "react-router-dom";
 
 const Home = ({handleLogout}) => {

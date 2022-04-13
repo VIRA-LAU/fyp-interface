@@ -1,11 +1,12 @@
 import React from 'react';
-import Video from "../../Video";
+import Video from "../Video/Video";
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { FixedSizeList } from 'react-window';
 import {Container, Grid} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 
 function renderRow(props) {
@@ -22,11 +23,14 @@ function renderRow(props) {
 
 
 const Stats = () => {
+    let navigate = useNavigate();
     return (
         <section className="home">
             <nav>
                 <h2>Welcome</h2>
-                <button>Stats</button>
+                <button onClick={ () => navigate("../", { replace: true })}>Home</button>
+                <button onClick={ () => navigate("../stats", { replace: true })}>Stats</button>
+                <button onClick={ () => navigate("../players", { replace: true })}>Players</button>
                 <button>Classify</button>
             </nav>
 

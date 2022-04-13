@@ -1,9 +1,11 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ImageUpload from '../ImageUpload';
 import { getFirestore, addDoc, collection } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import fire from "../../fire";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import { RingLoader} from 'react-spinners';
 const Players = () => {
     const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/players"
     const db = getFirestore(fire);
@@ -17,14 +19,20 @@ const Players = () => {
             email: "",
             imageURL: ""
     });
-    const [fn, setFn]=useState("");
-    const [ln, setLn]=useState("");
-    const [e, setEmail]=useState("");
-    const [iUrl, setImageUrl]=useState("");
 
     const [image, setImg]=useState();
-
-
+    let [loading, setLoading] = useState(false);
+    const style = {
+        display: "block",
+        margin: "0 auto",
+        borderColor: "red"
+};
+    let progress;
+    useEffect(() => {
+        if(progress<99){
+            setLoading(true);
+        }
+    });
     function handleChange(e){
         e.preventDefault();
         const {name,value}=e.target;
@@ -41,7 +49,7 @@ const Players = () => {
         const uploadTask = uploadBytesResumable(storageRef, img);
         const playersCollection = collection(db, '/players');
         uploadTask.on("state_changed", (snapshot) => {
-            const progress = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+            progress = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
             console.log(progress);
         }, (err)=> console.log(err),
         async () => {
@@ -58,20 +66,9 @@ const Players = () => {
             console.log("payload", payload)
             axios.post(url, payload)
                 .then(function (response) {
+                    setLoading(false);
                     console.log(response);
                 })
-                // getDownloadURL(uploadTask.snapshot.ref)
-                //     .then((url) =>
-                //         console.log(url))
-                //     .finally(() => {
-                //             console.log("Hello Thereeeee");
-                //             console.log("Data: " + data);
-                //             addDoc(playersCollection, data).then(() =>
-                //             console.log(`Your players was created and added.`));
-                //
-                //     }
-                //     )
-                //     ;
             }
         );
     }
@@ -79,25 +76,53 @@ const Players = () => {
         e.preventDefault();
         await uploadImage(image);
         console.log(data);
+        setData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            imageURL: ""
+        });
+        //this.$emit('addPlayerEvent');
+        setLoading(true);
+        console.log(loading);
+
+
     }
+    let navigate = useNavigate();
     return (
-        <section className="player-registration">
+        <section className="player-registration" id="home">
+            <section className="home2">
+                <div style={{"paddingTop": "15px"}}>
+            <nav>
+                <button onClick={ () => navigate("../stats", { replace: true })}>Stats</button>
+                <button onClick={ () => navigate("../", { replace: true })}>Home</button>
+                <button onClick={ () => navigate("../players", { replace: true })}>Players</button>
+                <button>Classify</button>
+            </nav>
+                </div>
+                <div style={{display:"flex", paddingTop:"50px", justifyContent:"center"}}>
             <div className="player-container" id="player-container">
                 <div className="form-container registration-container">
                     <form action="#">
+                        {loading && <RingLoader color="#603bbb" style={style}  size={150}/>}
                         <input type="text"  onChange={handleChange} placeholder="First Name" name="firstName" value={data.firstName} />
                         <input type="text"  onChange={handleChange} placeholder="Last Name" name="lastName" value={data.lastName}/>
                         <input type="email"  onChange={handleChange} placeholder="Email" name="email" value={data.email}/>
                         <button className="registrationBtn" style={{ marginTop: "10px"}} onClick={addPlayer}>Add</button>
+
                     <div className="overlay">
                         <div className="overlay-panel">
                             <ImageUpload setImg={setImg} />
                         </div>
+
+
                     </div>
                 </form>
             </div>
         </div>
-    </section>
+                </div>
+            </section>
+        </section>
     );
 };
 
