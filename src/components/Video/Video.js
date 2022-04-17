@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import ReactPlayer from "react-player";
 import SwiperCore, {EffectCoverflow, Navigation, Pagination, Autoplay} from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import {Swiper, SwiperSlide} from "swiper/react";
 import {IMAGES} from "../../utils/constants/images";
 import {Autocomplete, Grid, TextField, Typography, useMediaQuery, useTheme} from "@mui/material";
 import Slide from "../Slide";
@@ -21,15 +21,13 @@ SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
 function Video() {
     const theme = useTheme()
-    const [profiles, setProfiles]=useState();
-
+    const [profiles, setProfiles] = useState();
     const isSmall = useMediaQuery(theme.breakpoints.down('md'));
-
     const [expanded, setExpanded] = React.useState([]);
     const [selected, setSelected] = React.useState([]);
     const [selectedPlayer, setSelectedPlayer] = React.useState({
-        name:'',
-        id:''
+        name: '',
+        id: ''
     })
 
     const handleToggle = (event, nodeIds) => {
@@ -53,37 +51,32 @@ function Video() {
     };
 
     const [videoFilePath, setVideoFilePath] = useState(null);
+
     const handleVideoUpload = (event) => {
         setVideoFilePath(URL.createObjectURL(event.target.files[0]));
     };
 
-
-
     useEffect(async () => {
         const response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/players");
         setProfiles(response);
-
-        if(selected[0]!==0){
-            setVideoFilePath(VIDEOS[selected[0]-1])
-        }
-        else{
+        if (selected[0] !== 0) {
+            setVideoFilePath(VIDEOS[selected[0] - 1])
+        } else {
             setVideoFilePath(null)
         }
-    },[selected])
+    }, [selected])
+    // console.log(selectedPlayer)
 
-
-   // console.log(selectedPlayer)
-
-    const renderSwiper = () =>{
-      //  console.log(profiles)
-        if(profiles) {
+    const renderSwiper = () => {
+        //  console.log(profiles)
+        if (profiles) {
             return <>
                 {profiles.data.map(({firstName, lastName, imageUrl, playerId}, i) => {
-              //      console.log(imageUrl)
+                    //      console.log(imageUrl)
                     return (
 
                         <SwiperSlide key={i}>
-                            <Slide src={imageUrl} name={firstName+ " " + lastName} id={playerId}/>
+                            <Slide src={imageUrl} name={firstName + " " + lastName} id={playerId}/>
                         </SwiperSlide>
                     );
                 })}
