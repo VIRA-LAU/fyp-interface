@@ -31,6 +31,7 @@ const Stats = () => {
                 <button onClick={ () => navigate("../", { replace: true })}>Home</button>
                 <button onClick={ () => navigate("../stats", { replace: true })}>Stats</button>
                 <button onClick={ () => navigate("../players", { replace: true })}>Players</button>
+                <button onClick={ () => navigate("../systems", { replace: true })}>Systems</button>
                 <button>Classify</button>
             </nav>
 
