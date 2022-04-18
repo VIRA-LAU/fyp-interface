@@ -306,3 +306,15 @@ input{
     margin-bottom: 0;
     padding-bottom: 0;
 }
+
+.MuiTablePagination-displayedRows{
+    color: white;
+}
+
+.MuiTablePagination-actions{
+    color: white;
+}
+
+.MuiSvgIcon-root{
+    color: white;
+}
