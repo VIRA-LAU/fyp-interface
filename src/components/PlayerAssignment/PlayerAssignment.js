@@ -15,11 +15,6 @@ function PlayerAssignment(props) {
         console.log(props.videoId);
         console.log("Player ID: " + props.playerName);
         vidUrl = vidUrl + props.videoId +"/"+props.personId +"/"+props.playerId;
-        const article = {
-            videoId: props.videoId,
-            detectionTrackingId: props.personId,
-            playerId: props.playerId
-        };
         const update = await axios.put(vidUrl, article);
         console.log(update);
 
