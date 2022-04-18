@@ -1,12 +1,31 @@
 import {Autocomplete, Grid, TextField, Typography} from "@mui/material";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Button from "@mui/material/Button";
-import React from "react";
-
+import React, {useState} from "react";
+import axios from "axios";
 
 
 function PlayerAssignment(props) {
-    return (<Grid item xs={12}>
+    const [newPerson, setNewPerson] = useState("");
+    let vidUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/";
+    async function assign() {
+        console.log("Assign Pressed!!!!!");
+        console.log("PersonId " + newPerson);
+        console.log(props.personId);
+        console.log(props.videoId);
+        console.log("Player ID: " + props.playerName);
+        vidUrl = vidUrl + props.videoId +"/"+props.personId +"/"+props.playerId;
+        const article = {
+            videoId: props.videoId,
+            detectionTrackingId: props.personId,
+            playerId: props.playerId
+        };
+        const update = await axios.put(vidUrl, article);
+        console.log(update);
+
+    }
+
+    return (
         <div>
             <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -67,7 +86,7 @@ function PlayerAssignment(props) {
                                             }}
                                             disabled
                                             // Get person ID from endpoint
-                                            value={props.videoFilePath.personId}
+                                            value={props.personId}
                                         />
                                     </div>
                                 </div>
@@ -99,30 +118,19 @@ function PlayerAssignment(props) {
                                                 Person
                                             </Typography>
                                         </div>
-
-                                        <Autocomplete
-                                            onInputChange={(event, newInputValue) => {
-                                                console.log(newInputValue, event)
+                                        <TextField
+                                            disabled
+                                            variant="outlined"
+                                            value={props.playerName}
+                                            style={{
+                                                borderBottom: 'none',
+                                                maxWidth: '100%',
+                                                alignSelf: 'center',
+                                                flexGrow: 1,
+                                                background: 'rgb(233,233,233)',
+                                                borderRadius: '0px 20px 20px 0px'
                                             }}
-                                            options={props.profiles}
-                                            fullWidth
-                                            getOptionLabel={(e) => e.firstName + " " + e.lastName}
-                                            filterSelectedOptions
-                                            renderInput={(params) => (
 
-                                                <TextField
-                                                    {...params}
-                                                    variant="outlined"
-                                                    style={{
-                                                        borderBottom: 'none',
-                                                        maxWidth: '100%',
-                                                        alignSelf: 'center',
-                                                        flexGrow: 1,
-                                                        background: 'rgb(233,233,233)',
-                                                        borderRadius: '0px 20px 20px 0px'
-                                                    }}
-                                                />
-                                            )}
                                         />
 
                                     </div>
@@ -140,9 +148,7 @@ function PlayerAssignment(props) {
                                     fontSize: '1em',
                                     background: "rgba(38, 20, 72, 0.9)"
                                 }}
-                                // disabled={ isLoading}
-                                // // disabled={ !value>0 || fetchTransferPending || to==="" }
-                                // onClick={() => handleAssign()}
+                                onClick={assign}
                             >
                                 Assign
                             </Button>
@@ -150,8 +156,7 @@ function PlayerAssignment(props) {
                     </div>
                 </Grid>
             </Grid>
-        </div>
-    </Grid>);
+        </div>);
 }
 
 export default PlayerAssignment;

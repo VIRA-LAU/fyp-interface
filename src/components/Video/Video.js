@@ -4,12 +4,8 @@ import SwiperCore, {EffectCoverflow, Navigation, Pagination, Autoplay} from "swi
 import {Swiper, SwiperSlide} from "swiper/react";
 import {IMAGES} from "../../utils/constants/images";
 import {
-    Autocomplete,
     Grid,
     List,
-    Stack,
-    TextField,
-    ThemeProvider,
     Typography,
     useMediaQuery,
     useTheme
@@ -19,58 +15,48 @@ import Box from '@mui/material/Box';
 import './Video.css';
 import axios from "axios";
 import VideoItem from "../Videos/VideoItem";
-import PlayerAssignment from "../PlayerAssignment";
+import PlayerAssignment from "../PlayerAssignment/PlayerAssignment";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
-
 
 function Video() {
     const theme = useTheme()
     const [profiles, setProfiles] = useState("");
     const isSmall = useMediaQuery(theme.breakpoints.down('md'));
-    const [expanded, setExpanded] = React.useState([]);
-    const [selected, setSelected] = React.useState([]);
     const [videos, setVideos] = useState();
     const [videoFilePath, setVideoFilePath] = useState("");
     const [detectionUrl, setDetectionUrl] = useState("");
     const [recognitionUrl, setRecognitionUrl] = useState("");
+    const [personId, setPersonId] = useState(null);
+    const [videoId, setVideoId] = useState(null);
+    const [playerId, setPlayerId] = useState("");
+    const [playerName, setPlayerName] = useState("");
 
-
-    const handleToggle = (event, nodeIds) => {
-        setExpanded(nodeIds);
-    };
-
-    const handleSelect = (event, nodeIds) => {
-        setSelected(nodeIds);
-    };
-
-    // const handleVideoUpload = (event) => {
-    //     setVideoFilePath(URL.createObjectURL(event.target.files[0]));
-    // };
+    const videoUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/{videoId}/{detectionTrackingId}/{playerId}";
 
     useEffect(async () => {
         const players_response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/players");
         setProfiles(players_response);
+        console.log(players_response.data.playerId);
         const vid_response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Videos-Info");
         setVideos(vid_response);
-        // if (selected[0] !== 0) {
-        //
-        // } else {
-        //     setVideoFilePath(null)
-        // }
+        console.log(vid_response);
     }, [])
-    // console.log(selectedPlayer)
+
+
+    async function handleOnClick(e){
+        console.log("");
+    }
+
 
     const renderSwiper = () => {
-        //  console.log(profiles)
+        console.log(profiles)
         if (profiles) {
             return <>
                 {profiles.data.map(({firstName, lastName, imageUrl, playerId}, i) => {
-                    //      console.log(imageUrl)
                     return (
-
-                        <SwiperSlide key={i}>
-                            <Slide src={imageUrl} name={firstName + " " + lastName} id={playerId}/>
+                        <SwiperSlide key={i} >
+                            <Slide src={imageUrl} name={firstName + " " + lastName} id={playerId} setPlayerId={setPlayerId} setPlayerName={setPlayerName}/>
                         </SwiperSlide>
                     );
                 })}
@@ -94,11 +80,12 @@ function Video() {
         console.log("video file path" + videoFilePath)
         if (videos) {
             return (
-                <Box sx={{display: 'flex', width: '100%', minWidth: 250, bgcolor: 'background.paper'}}>
-                    <nav aria-label="main mailbox folders">
-                        <List>
+                <Box sx={{display: 'flex', width: '100%', bgcolor: 'background.paper', flex: 1}}>
+                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row'}}>
+                        <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {videos.data.map((video) => {
                                 return (
+
                                     <VideoItem key={video.videoId} videoId={video.videoId} videoName={video.videoName}
                                                videoRawUrl={video.videoRawUrl}
                                                videoDetectUrl={video.videoDetectUrl}
@@ -107,7 +94,8 @@ function Video() {
                                                    setVideoFilePath(video.videoRawUrl)
                                                    setDetectionUrl(video.videoDetectUrl)
                                                    setRecognitionUrl(video.videoClassifyUrl)
-                                                   console.log("video clicked is " + video.videoName)
+                                                   setPersonId(() => {return video.personId===null? "No tracking" : video.personId})
+                                                   setVideoId(video.videoId)
                                                }}
                                     />
                                 );
@@ -123,14 +111,10 @@ function Video() {
     }
 
     return (
-        <div className={"video-page-container"}>
-            {/*<input className="player" type="file" onChange={handleVideoUpload} />*/}
+        <div className={"video-page-container"}>}
             <Swiper
                 effect={"coverflow"}
                 grabCursor={true}
-                // autoplay={{
-                //     delay: 1000,
-                // }}
                 height={300}
                 loop={true}
                 centeredSlides={true}
@@ -143,10 +127,8 @@ function Video() {
                     slideShadows: false,
                 }}
                 pagination={true}
-                // navigation={true}
                 className="mySwiper"
             >
-
                 {renderSwiper()}
             </Swiper>
             <div
@@ -157,54 +139,53 @@ function Video() {
                 <div style={{
                     display: 'flex'
                 }}>
-                    {/* Video Displays*/}
-                    <Grid container marginTop={2} spacing={3}>
-                        <div style={{
-                            display: 'flex'
-                        }}>
-                            {renderVideos()}
-                        </div>
-                        {
-                            videoFilePath &&
-                            <>
-                                <Grid item xs={4}>
-                                    <Stack spacing={2} direction="row">
-                                    <Typography textAlign={"center"}
-                                                sx={{
-                                                    color: 'white'
-                                                }}
-                                                variant={"h5"}>
-                                        Raw Video
-                                    </Typography>
-                                    <ReactPlayer  playing={true} muted={true} width={"100%"} className="player" controls
-                                                 url={videoFilePath}/>
-                                    <Typography textAlign={"center"}
-                                                sx={{
-                                                    color: 'white'
-                                                }}
-                                                variant={"h5"}>
-                                        Detection Video
-                                    </Typography>
-                                    <ReactPlayer  playing={true} muted={true} width={"100%"} className="player" controls
-                                                 url={detectionUrl}/>
-                                    <Typography textAlign={"center"}
-                                                sx={{
-                                                    color: 'white'
-                                                }}
-                                                variant={"h5"}>
-                                        Classification Video
-                                    </Typography>
-                                    <ReactPlayer  playing={true} muted={true} width={"100%"} className="player" controls
-                                                 url={recognitionUrl}/>
-                                        </Stack>
 
-                                </Grid>
-                            </>
-                        }
-                    </Grid>
+                    {renderVideos()}
+
+
                 </div>
-                <PlayerAssignment videoFilePath = {videoFilePath} profiles = {profiles}/>
+                <Grid container marginTop={2} spacing={3}>
+                    {
+                        videoFilePath &&
+                        <>
+                            <Grid item xs={4}>
+                                <Typography textAlign={"center"}
+                                            sx={{
+                                                color: 'white'
+                                            }}
+                                            variant={"h5"}>
+                                    Raw Video
+                                </Typography>
+                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                             url={videoFilePath}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography textAlign={"center"}
+                                            sx={{
+                                                color: 'white'
+                                            }}
+                                            variant={"h5"}>
+                                    Detection Video
+                                </Typography>
+                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                             url={detectionUrl}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography textAlign={"center"}
+                                            sx={{
+                                                color: 'white'
+                                            }}
+                                            variant={"h5"}>
+                                    Classification Video
+                                </Typography>
+                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                             url={recognitionUrl}/>
+                            </Grid>
+                        </>
+                    }
+                </Grid>
             </div>
+            <PlayerAssignment videoFilePath={videoFilePath} profiles={profiles} personId ={personId} videoId={videoId} playerId={playerId} playerName={playerName}/>
         </div>
     )
 }
