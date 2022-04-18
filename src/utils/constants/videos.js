@@ -1,6 +1,7 @@
 export const VIDEOS = [
     {
         name:'video0',
+        videoId: 2,
         videos: {
             preprocessing: {
                 id:1,
@@ -22,7 +23,7 @@ export const VIDEOS = [
         videos: {
             preprocessing: {
                 id:1,
-                path:'https://www.youtube.com/watch?v=4KHiSt0oLJ0'
+                path:'https://drive.google.com/file/d/1ECvcziogMcBpPB7_AEc21AfWA00Jwmb8/view'
             },
             tracking: {
                 id:1,
