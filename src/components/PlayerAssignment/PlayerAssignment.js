@@ -15,7 +15,7 @@ function PlayerAssignment(props) {
     const [loading, setLoading] = useState(false);
     const [assignStatus, setAssignStatus] = useState(false);
 
-
+    console.log(props)
 
 
     let vidUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/";
@@ -37,7 +37,7 @@ function PlayerAssignment(props) {
 
 
 
-    function isAssigning() {
+    function isAssigned() {
         if (loading)
         return <>
             <div style={{paddingTop: '20px', color: "white"}}>Assigning ....</div>
@@ -48,9 +48,50 @@ function PlayerAssignment(props) {
         </>;
     }
 
-    function ifSuccess() {
-        if(assignStatus)
-        return <CustomSnackBar/>;
+
+
+    function getButton() {
+        console.log(props.personId)
+        if(props.videoFilePath === '' && props.playerId === '') {
+            return (<div style={{paddingTop: "25px", color:"white"}}>
+                A Video And Person Needed To Be Selected First
+            </div>
+            ) } else if(props.videoFilePath === '') {
+                return (<div style={{paddingTop: "25px", color:"white"}}>
+                        Select A Video
+                    </div>
+            )
+        }  else if(props.personId === 'No tracking') {
+        return (<div style={{paddingTop: "25px", color:"white"}}>
+                This Video Has No Current Tracking! Select Another One
+            </div>
+        )
+    }
+    else if(props.playerId === '') {
+            return (<div style={{paddingTop: "25px", color:"white"}}>
+                    Select A Person
+                </div>
+            )
+        } else {
+            return <Button
+
+                variant="contained"
+                style={{
+                    color: "white",
+                    minWidth: '45%',
+                    maxWidth: '45%',
+                    alignSelf: 'center',
+                    marginTop: '25px',
+                    height: '60px',
+                    borderRadius: '30px',
+                    fontSize: '1em',
+                    background: "rgba(38, 20, 72, 0.9)"
+                }}
+                onClick={assign('success')}
+            >
+                Assign
+            </Button>;
+        }
     }
 
     return (
@@ -165,26 +206,9 @@ function PlayerAssignment(props) {
                                 </div>
                             </div>
                             <React.Fragment>
-                            <Button
-
-                                variant="contained"
-                                style={{
-                                    color: "white",
-                                    minWidth: '45%',
-                                    maxWidth: '45%',
-                                    alignSelf: 'center',
-                                    marginTop: '25px',
-                                    height: '60px',
-                                    borderRadius: '30px',
-                                    fontSize: '1em',
-                                    background: "rgba(38, 20, 72, 0.9)"
-                                }}
-                                onClick={assign('success')}
-                            >
-                                Assign
-                            </Button>
+                                {getButton()}
                             </React.Fragment>
-                            {isAssigning()}
+                            {isAssigned()}
 
                         </div>
                     </div>
