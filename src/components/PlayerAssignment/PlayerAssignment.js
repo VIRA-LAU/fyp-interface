@@ -1,4 +1,4 @@
-import {Autocomplete, Grid, TextField, Typography} from "@mui/material";
+import {Grid, TextField, Typography} from "@mui/material";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
@@ -7,64 +7,79 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import {useSnackbar} from "notistack";
 
+let vidUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/";
+let noTracking = 'No tracking';
+
 
 function PlayerAssignment(props) {
     const [loading, setLoading] = useState(false);
     const [assignStatus, setAssignStatus] = useState(false);
-
-
-
-    let vidUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/";
-
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
 
     const assign = (variant) => async () => {
         setLoading(true)
-        vidUrl = vidUrl + props.videoId +"/"+props.personId +"/"+props.playerId;
+        vidUrl = vidUrl + props.videoId + "/" + props.personId + "/" + props.playerId;
         const update = await axios.put(vidUrl);
         setLoading(false)
         // variant could be success, error, warning, info, or default
-        if (update.status === 200){
+        if (update.status === 200) {
             setAssignStatus(true)
-            enqueueSnackbar('Player Has Been Assigned!', { variant });
+            enqueueSnackbar('Player Has Been Assigned!', {variant});
         }
     };
 
 
-
-    function isAssigned() {
-        if (loading)
-        return <>
-            <div style={{paddingTop: '20px', color: "white"}}>Assigning ....</div>
-            <Box sx={{paddingTop: '20px', width: '100%'}}>
-                <LinearProgress/>
-
-            </Box>
-        </>;
+    const isVideoNotTracked = () => {
+        return props.personId === noTracking;
     }
 
+    const isVideoNotSelected = () => {
+        return props.videoFilePath === '';
+    }
+
+    const isPersonNotSelected = () => {
+        return props.playerId === '';
+    }
+
+    const isVideoAndPlayerNotSelected = () => {
+        return props.videoFilePath === '' && props.playerId === '';
+    }
+
+
+    const isAssigned = () => {
+        if (loading)
+            return <>
+                <div style={{paddingTop: '20px', color: "white"}}>Assigning ....</div>
+                <Box sx={{paddingTop: '20px', width: '100%'}}>
+                    <LinearProgress/>
+
+                </Box>
+            </>;
+    }
 
 
     function getButton() {
         console.log(props.personId)
-        if(props.videoFilePath === '' && props.playerId === '') {
-            return (<div style={{paddingTop: "25px", color:"white"}}>
-                A Video And Person Needed To Be Selected First
-            </div>
-            ) } else if(props.videoFilePath === '') {
-                return (<div style={{paddingTop: "25px", color:"white"}}>
-                        Select A Video
-                    </div>
+
+
+        if (isVideoAndPlayerNotSelected()) {
+            return (<div style={{paddingTop: "25px", color: "white"}}>
+                    A Video And Person Needed To Be Selected First
+                </div>
             )
-        }  else if(props.personId === 'No tracking') {
-        return (<div style={{paddingTop: "25px", color:"white"}}>
-                This Video Has No Current Tracking! Select Another One
-            </div>
-        )
-    }
-    else if(props.playerId === '') {
-            return (<div style={{paddingTop: "25px", color:"white"}}>
+        } else if (isVideoNotSelected()) {
+            return (<div style={{paddingTop: "25px", color: "white"}}>
+                    Select A Video
+                </div>
+            )
+        } else if (isVideoNotTracked()) {
+            return (<div style={{paddingTop: "25px", color: "white"}}>
+                    This Video Has No Current Tracking! Select Another One
+                </div>
+            )
+        } else if (isPersonNotSelected()) {
+            return (<div style={{paddingTop: "25px", color: "white"}}>
                     Select A Person
                 </div>
             )
