@@ -3,21 +3,57 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
 import axios from "axios";
+import {Spinner} from "react-bootstrap";
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
+import CustomSnackBar from "../Snackbar";
+import {useSnackbar} from "notistack";
 
 
 function PlayerAssignment(props) {
     const [newPerson, setNewPerson] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [assignStatus, setAssignStatus] = useState(false);
+
+
+
+
     let vidUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/";
-    async function assign() {
-        console.log("Assign Pressed!!!!!");
-        console.log("PersonId " + newPerson);
-        console.log(props.personId);
-        console.log(props.videoId);
-        console.log("Player ID: " + props.playerName);
+
+    const { enqueueSnackbar } = useSnackbar();
+
+    const handleClick = () => {
+        enqueueSnackbar('I love snacks.');
+    };
+
+    const assign = (variant) => async () => {
+        setLoading(true)
         vidUrl = vidUrl + props.videoId +"/"+props.personId +"/"+props.playerId;
         const update = await axios.put(vidUrl);
-        console.log(update);
+        setLoading(false)
+        // variant could be success, error, warning, info, or default
+        if (update.status === 200){
+            setAssignStatus(true)
+            enqueueSnackbar('Player Has Been Assigned!', { variant });
+        }
+    };
 
+
+
+    function isAssigning() {
+        if (loading)
+        return <>
+            <div style={{paddingTop: '20px', color: "white"}}>Assigning ....</div>
+            <Box sx={{paddingTop: '20px', width: '100%'}}>
+                <LinearProgress/>
+
+            </Box>
+        </>;
+    }
+
+    function ifSuccess() {
+        if(assignStatus)
+        return <CustomSnackBar/>;
     }
 
     return (
@@ -131,9 +167,12 @@ function PlayerAssignment(props) {
                                     </div>
                                 </div>
                             </div>
+                            <React.Fragment>
                             <Button
+
                                 variant="contained"
                                 style={{
+                                    color: "white",
                                     minWidth: '45%',
                                     maxWidth: '45%',
                                     alignSelf: 'center',
@@ -143,10 +182,13 @@ function PlayerAssignment(props) {
                                     fontSize: '1em',
                                     background: "rgba(38, 20, 72, 0.9)"
                                 }}
-                                onClick={assign}
+                                onClick={assign('success')}
                             >
                                 Assign
                             </Button>
+                            </React.Fragment>
+                            {isAssigning()}
+
                         </div>
                     </div>
                 </Grid>
