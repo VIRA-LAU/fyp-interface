@@ -1,89 +1,62 @@
 import React, {useEffect, useState} from "react";
 import ReactPlayer from "react-player";
 import SwiperCore, {EffectCoverflow, Navigation, Pagination, Autoplay} from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import {Swiper, SwiperSlide} from "swiper/react";
 import {IMAGES} from "../../utils/constants/images";
-import {Autocomplete, Grid, TextField, Typography, useMediaQuery, useTheme} from "@mui/material";
+import {
+    Grid,
+    List,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from "@mui/material";
 import Slide from "../Slide";
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeView from '@mui/lab/TreeView';
-import TreeItem from '@mui/lab/TreeItem';
 import './Video.css';
-import {VIDEOS} from "../../utils/constants/videos";
-import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import axios from "axios";
+import VideoItem from "../Videos/VideoItem";
+import PlayerAssignment from "../PlayerAssignment/PlayerAssignment";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
-
 function Video() {
     const theme = useTheme()
-    const [profiles, setProfiles]=useState();
-
+    const [profiles, setProfiles] = useState("");
     const isSmall = useMediaQuery(theme.breakpoints.down('md'));
+    const [videos, setVideos] = useState();
+    const [videoFilePath, setVideoFilePath] = useState("");
+    const [detectionUrl, setDetectionUrl] = useState("");
+    const [recognitionUrl, setRecognitionUrl] = useState("");
+    const [personId, setPersonId] = useState(null);
+    const [videoId, setVideoId] = useState(null);
+    const [playerId, setPlayerId] = useState("");
+    const [playerName, setPlayerName] = useState("");
 
-    const [expanded, setExpanded] = React.useState([]);
-    const [selected, setSelected] = React.useState([]);
-    const [selectedPlayer, setSelectedPlayer] = React.useState({
-        name:'',
-        id:''
-    })
-
-    const handleToggle = (event, nodeIds) => {
-        setExpanded(nodeIds);
-    };
-
-    const handleSelect = (event, nodeIds) => {
-        setSelected(nodeIds);
-    };
-
-    const handleExpandClick = () => {
-        setExpanded((oldExpanded) =>
-            oldExpanded.length === 0 ? ['1', '5', '6', '7'] : [],
-        );
-    };
-
-    const handleSelectClick = () => {
-        setSelected((oldSelected) =>
-            oldSelected.length === 0 ? ['1', '2', '3', '4', '5', '6', '7', '8', '9'] : [],
-        );
-    };
-
-    const [videoFilePath, setVideoFilePath] = useState(null);
-    const handleVideoUpload = (event) => {
-        setVideoFilePath(URL.createObjectURL(event.target.files[0]));
-    };
-
-
+    const videoUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/{videoId}/{detectionTrackingId}/{playerId}";
 
     useEffect(async () => {
-        const response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/players");
-        setProfiles(response);
-
-        if(selected[0]!==0){
-            setVideoFilePath(VIDEOS[selected[0]-1])
-        }
-        else{
-            setVideoFilePath(null)
-        }
-    },[selected])
+        const players_response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/players");
+        setProfiles(players_response);
+        console.log(players_response.data.playerId);
+        const vid_response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Videos-Info");
+        setVideos(vid_response);
+        console.log(vid_response);
+    }, [])
 
 
-   // console.log(selectedPlayer)
+    async function handleOnClick(e){
+        console.log("");
+    }
 
-    const renderSwiper = () =>{
-      //  console.log(profiles)
-        if(profiles) {
+
+    const renderSwiper = () => {
+        console.log(profiles)
+        if (profiles) {
             return <>
                 {profiles.data.map(({firstName, lastName, imageUrl, playerId}, i) => {
-              //      console.log(imageUrl)
                     return (
-
-                        <SwiperSlide key={i}>
-                            <Slide src={imageUrl} name={firstName+ " " + lastName} id={playerId}/>
+                        <SwiperSlide key={i} >
+                            <Slide src={imageUrl} name={firstName + " " + lastName} id={playerId} setPlayerId={setPlayerId} setPlayerName={setPlayerName}/>
                         </SwiperSlide>
                     );
                 })}
@@ -102,15 +75,46 @@ function Video() {
         }
     }
 
+    const renderVideos = () => {
+        console.log("rendered again")
+        console.log("video file path" + videoFilePath)
+        if (videos) {
+            return (
+                <Box sx={{display: 'flex', width: '100%', bgcolor: 'background.paper', flex: 1}}>
+                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row'}}>
+                        <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
+                            {videos.data.map((video) => {
+                                return (
+
+                                    <VideoItem key={video.videoId} videoId={video.videoId} videoName={video.videoName}
+                                               videoRawUrl={video.videoRawUrl}
+                                               videoDetectUrl={video.videoDetectUrl}
+                                               videoClassifyUrl={video.videoClassifyUrl}
+                                               displayVideo={() => {
+                                                   setVideoFilePath(video.videoRawUrl)
+                                                   setDetectionUrl(video.videoDetectUrl)
+                                                   setRecognitionUrl(video.videoClassifyUrl)
+                                                   setPersonId(() => {return video.personId===null? "No tracking" : video.personId})
+                                                   setVideoId(video.videoId)
+                                               }}
+                                    />
+                                );
+                            })}
+                        </List>
+                    </nav>
+                </Box>
+            );
+        } else {
+            return <>
+            </>;
+        }
+    }
+
     return (
-        <div className={"video-page-container"}>
-            {/*<input className="player" type="file" onChange={handleVideoUpload} />*/}
+        <div className={"video-page-container"}>}
             <Swiper
                 effect={"coverflow"}
                 grabCursor={true}
-                // autoplay={{
-                //     delay: 1000,
-                // }}
                 height={300}
                 loop={true}
                 centeredSlides={true}
@@ -123,10 +127,8 @@ function Video() {
                     slideShadows: false,
                 }}
                 pagination={true}
-                // navigation={true}
                 className="mySwiper"
             >
-
                 {renderSwiper()}
             </Swiper>
             <div
@@ -137,239 +139,53 @@ function Video() {
                 <div style={{
                     display: 'flex'
                 }}>
-                    <Box sx={{display: 'flex', minWidth: '150px', overflowY: 'auto', color: 'white'}}>
-                        <TreeView
-                            aria-label="controlled"
-                            defaultCollapseIcon={<ExpandMoreIcon/>}
-                            defaultExpandIcon={<ChevronRightIcon/>}
-                            expanded={expanded}
-                            selected={selected}
-                            onNodeToggle={handleToggle}
-                            onNodeSelect={handleSelect}
-                            multiSelect
-                        >
-                            <TreeItem nodeId="0" label="Videos">
-                                {
-                                    VIDEOS.map(({name, videos}, index) =>
-                                        <TreeItem nodeId={index + 1} label={name}/>
-                                    )
-                                }
-                            </TreeItem>
-                        </TreeView>
-                    </Box>
+
+                    {renderVideos()}
+
+
+                </div>
+                <Grid container marginTop={2} spacing={3}>
                     {
                         videoFilePath &&
-                        <div style={{
-                            margin: '0 auto',
-                        }}>
-                            <Typography textAlign={"center"} sx={{color: 'white'}} marginRight={"150px"} variant={"h5"}>
-                                The following video is being played: {videoFilePath.name}
-                            </Typography>
-                        </div>
+                        <>
+                            <Grid item xs={4}>
+                                <Typography textAlign={"center"}
+                                            sx={{
+                                                color: 'white'
+                                            }}
+                                            variant={"h5"}>
+                                    Raw Video
+                                </Typography>
+                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                             url={videoFilePath}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography textAlign={"center"}
+                                            sx={{
+                                                color: 'white'
+                                            }}
+                                            variant={"h5"}>
+                                    Detection Video
+                                </Typography>
+                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                             url={detectionUrl}/>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography textAlign={"center"}
+                                            sx={{
+                                                color: 'white'
+                                            }}
+                                            variant={"h5"}>
+                                    Classification Video
+                                </Typography>
+                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                             url={recognitionUrl}/>
+                            </Grid>
+                        </>
                     }
-
-                </div>
-
-                <div>
-                    <Grid container marginTop={2} spacing={3}>
-                        {
-                            videoFilePath &&
-                            <>
-                                <Grid item xs={4}>
-                                    <Typography textAlign={"center"}
-                                                sx={{
-                                                    color: 'white'
-                                                }}
-                                                variant={"h5"}>
-                                        Base Video
-                                    </Typography>
-                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
-                                                 url={videoFilePath.videos.preprocessing.path}/>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Typography textAlign={"center"}
-                                                sx={{
-                                                    color: 'white'
-                                                }}
-                                                variant={"h5"}>
-                                        Detection and Tracking
-                                    </Typography>
-                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
-                                                 url={videoFilePath.videos.tracking.path}/>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Typography textAlign={"center"}
-                                                sx={{
-                                                    color: 'white'
-                                                }}
-                                                variant={"h5"}>
-                                        Action Classification
-                                    </Typography>
-                                    <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
-                                                 url={videoFilePath.videos.classification.path}/>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <div>
-                                        <Grid container>
-                                            <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                <div style={{
-                                                    color: 'rgba(38, 20, 72, 0.9)',
-                                                    height: '100%'
-                                                }}>
-
-                                                    <div style={{
-                                                        display: 'flex',
-                                                        border: '2px solid rgba(38, 20, 72, 1)',
-                                                        flexDirection: 'column',
-                                                        boxSizing: 'border-box',
-                                                        borderRadius: '32.5px',
-                                                        padding: '20px 8px',
-                                                        alignItems: 'center',
-
-                                                    }}>
-                                                        <div style={{
-                                                            display: 'flex',
-                                                            flexDirection: 'row',
-                                                            minWidth: '95%',
-                                                            maxWidth: '95%',
-                                                            placeItems: 'center'
-                                                        }}>
-                                                            <div style={{
-                                                                minWidth: '45%',
-                                                                maxWidth: '45%'
-                                                            }}>
-                                                                <div style={{
-                                                                    display: 'flex',
-                                                                    placeContent: 'center', width: '100%'
-                                                                }}>
-                                                                    <div style={{
-                                                                        background: 'rgb(233,233,233)',
-                                                                        height: '56px',
-                                                                        minWidth: '150px',
-                                                                        maxWidth: '150px',
-                                                                        borderRadius: '20px 0px 0px 20px',
-                                                                        display: 'flex',
-                                                                        placeItems: 'center',
-                                                                        padding: '0px 10px'
-                                                                    }}>
-                                                                        <Typography variant="body1" fontWeight={100}>
-                                                                            Person Tracked
-                                                                        </Typography>
-                                                                    </div>
-                                                                    <TextField
-                                                                        variant="outlined"
-                                                                        style={{
-                                                                            borderBottom: 'none',
-                                                                            maxWidth: '100%',
-                                                                            alignSelf: 'center',
-                                                                            flexGrow: 1,
-                                                                            background: 'rgb(233,233,233)',
-                                                                            borderRadius: '0px 20px 20px 0px'
-
-                                                                        }}
-                                                                        disabled
-                                                                        // Get person ID from endpoint
-                                                                        value={videoFilePath.personId}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                            <ArrowRightAltIcon color="primary"
-                                                                               sx={{
-                                                                                   margin: 'auto',
-                                                                                   flexGrow: 1,
-                                                                               }}
-                                                            />
-                                                            <div style={{
-                                                                minWidth: '45%',
-                                                                maxWidth: '45%'
-                                                            }}>
-                                                                <div style={{
-                                                                    display: 'flex',
-                                                                    placeContent: 'center', width: '100%'
-                                                                }}>
-                                                                    <div style={{
-                                                                        background: 'rgb(233,233,233)',
-                                                                        height: '56px',
-                                                                        minWidth: '75px',
-                                                                        maxWidth: '75px',
-                                                                        borderRadius: '20px 0px 0px 20px',
-                                                                        display: 'flex',
-                                                                        placeItems: 'center',
-                                                                        padding: '0px 10px'
-                                                                    }}>
-                                                                        <Typography variant="body1" fontWeight={100}>
-                                                                            Person
-                                                                        </Typography>
-                                                                    </div>
-
-                                                                    <Autocomplete
-                                                                        onInputChange={(event, newInputValue) => {
-                                                                            console.log(newInputValue, event)
-                                                                            // setAmount(newInputValue);
-                                                                        }}
-                                                                        options={profiles.data}
-                                                                        fullWidth
-                                                                        getOptionLabel={(e) => e.firstName + " " + e.lastName}
-                                                                        filterSelectedOptions
-                                                                        renderInput={(params) => (
-
-                                                                            <TextField
-                                                                                {...params}
-                                                                                variant="outlined"
-                                                                                style={{
-                                                                                    borderBottom: 'none',
-                                                                                    maxWidth: '100%',
-                                                                                    alignSelf: 'center',
-                                                                                    flexGrow: 1,
-                                                                                    background: 'rgb(233,233,233)',
-                                                                                    borderRadius: '0px 20px 20px 0px'
-                                                                                }}
-                                                                            />
-                                                                        )}
-                                                                    />
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <Button
-                                                            variant="contained"
-                                                            style={{
-                                                                minWidth: '45%',
-                                                                maxWidth: '45%',
-                                                                alignSelf: 'center',
-                                                                marginTop: '25px',
-                                                                height: '60px',
-                                                                borderRadius: '30px',
-                                                                fontSize: '1em',
-                                                                background: "rgba(38, 20, 72, 0.9)"
-                                                            }}
-                                                            // disabled={ isLoading}
-                                                            // // disabled={ !value>0 || fetchTransferPending || to==="" }
-                                                            // onClick={() => handleAssign()}
-                                                        >
-                                                            Assign
-                                                        </Button>
-                                                        {/*{*/}
-                                                        {/*    error?*/}
-                                                        {/*        <Typography variant="body1" style={{color: '#d32f2f',marginTop:'20px'}}>*/}
-                                                        {/*            Invalid Address*/}
-                                                        {/*        </Typography>*/}
-                                                        {/*        :<></>*/}
-                                                        {/*}*/}
-                                                    </div>
-                                                </div>
-                                            </Grid>
-                                        </Grid>
-                                    </div>
-                                </Grid>
-                            </>
-                        }
-
-                    </Grid>
-                </div>
+                </Grid>
             </div>
-
-
+            <PlayerAssignment videoFilePath={videoFilePath} profiles={profiles} personId ={personId} videoId={videoId} playerId={playerId} playerName={playerName}/>
         </div>
     )
 }

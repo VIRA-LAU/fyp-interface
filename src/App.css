@@ -7,16 +7,6 @@
     font-family: "Nunito", sans-serif;
 }
 
-.player-registration{
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    height: 100vh;
-    margin: -20px 0 50px;
-}
 
 button {
     border: none;
@@ -128,44 +118,6 @@ button {
     );
 }
 
-.home  nav {
-    background: #603bbb;
-    width: 100%;
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.home2  nav {
-    background: #603bbb;
-    width: 100%;
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-
-.home  nav h2 {
-     color: #fff;
- }
-
-.home2  nav h2 {
-    color: #fff;
-}
-
-.home  nav button {
-    width: 86px;
-    padding: 8px 0;
-    background: #3a2b58;
-}
-
-.home2  nav button {
-    width: 86px;
-    padding: 8px 0;
-    background: #3a2b58;
-}
 
 .player {
     padding: 24px 0;

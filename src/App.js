@@ -16,6 +16,7 @@ import {Route, Routes} from "react-router-dom";
 import Layout from "./layouts";
 import Stats from "./components/Stats";
 import Players from "./components/Players/index";
+import Classify from "./components/Classify/Classify";
 
 
 const App = () => {
@@ -71,9 +72,6 @@ const App = () => {
             });
     };
 
-    const handleLogout = () => {
-        signOut(auth);
-    };
 
     const authListener = () => {
         onAuthStateChanged(auth, (user) => {
@@ -94,15 +92,13 @@ const App = () => {
 
     return (
         <div className="App">
-            {user ?  (
+            {user ? (
 
                 <Routes>
-
-
-                    <Route index element={<Home handleLogout={handleLogout} />} />
-                    <Route path="/stats" element={<Stats />} />
-                    <Route path="/players" element={<Players />} />
-
+                    <Route index element={<Home/>}/>
+                    <Route path="/stats" element={<Stats/>}/>
+                    <Route path="/players" element={<Players/>}/>
+                    <Route path="/classify" element={<Classify/>}/>
                 </Routes>
             ) : (
                 <Login

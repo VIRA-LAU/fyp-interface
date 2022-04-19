@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Typography} from "@mui/material";
+import axios from "axios";
 
-const Slide = ({src,name,id}) => {
+const Slide = ({src,name,id, setPlayerName, setPlayerId}) => {
+
+    async function handleOnClick(){
+        setPlayerName(name);
+        setPlayerId(id);
+    }
     return (
-        <div style={{
+        <div onClick={handleOnClick} style={{
             width:"100%",
             height:'600px',
             background: `no-repeat center/80% url(${src}), rgba(38, 20, 72, 0.9)`,
@@ -12,8 +18,7 @@ const Slide = ({src,name,id}) => {
             placeContent:'end',
             padding:'10%'
         }}>
-            {/*<img src={src} alt={id} />*/}
-            <div style={{
+            <div  style={{
                 background:'black',
                 padding:'10px',
                 marginBottom:'10px'
