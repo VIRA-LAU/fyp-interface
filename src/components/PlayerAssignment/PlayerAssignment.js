@@ -3,19 +3,15 @@ import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
 import axios from "axios";
-import {Spinner} from "react-bootstrap";
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
-import CustomSnackBar from "../Snackbar";
 import {useSnackbar} from "notistack";
 
 
 function PlayerAssignment(props) {
-    const [newPerson, setNewPerson] = useState("");
     const [loading, setLoading] = useState(false);
     const [assignStatus, setAssignStatus] = useState(false);
 
-    console.log(props)
 
 
     let vidUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/";
