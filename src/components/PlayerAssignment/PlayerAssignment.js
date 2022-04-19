@@ -22,9 +22,6 @@ function PlayerAssignment(props) {
 
     const { enqueueSnackbar } = useSnackbar();
 
-    const handleClick = () => {
-        enqueueSnackbar('I love snacks.');
-    };
 
     const assign = (variant) => async () => {
         setLoading(true)
