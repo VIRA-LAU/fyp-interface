@@ -1,0 +1,25 @@
+.main-div {
+    color: rgba(38, 20, 72, 0.9);
+    height: 100%;
+}
+
+.div-2 {
+    display: flex;
+    border: 2px solid rgba(38, 20, 72, 1);
+    flexDirection: column;
+    boxSizing: border-box;
+    borderRadius: 32.5px;
+    padding: 20px 8px;
+    alignItems: center;
+}
+.div-3 {
+    display: flex;
+    flexDirection: row;
+    minWidth: 95%;
+    maxWidth: 95%;
+    placeItems: center;
+}
+.div-4{
+    minWidth: 45%;
+    maxWidth: 45%;
+}
