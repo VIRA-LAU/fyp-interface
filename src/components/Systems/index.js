@@ -1,5 +1,5 @@
 import React from 'react';
-import {Component, useEffect, useState} from "react";
+import {Component, useEffect, useState, useMemo} from "react";
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import {useNavigate} from "react-router-dom";
@@ -22,7 +22,7 @@ const Systems = () => {
     useEffect(()=>{
         getSystems();
         setRows(systems.map((system) => ({id: system.roverName, roverName: system.roverName, cameraName: system.cameraName, imageQuality: system.imageQuality, numberOfVideos: system.numberOfVideos})));
-    },[systems])
+    },[systems.length])
     
     const columns = [
         { field: 'roverName', headerName: 'Rover Name', width: 310 },
