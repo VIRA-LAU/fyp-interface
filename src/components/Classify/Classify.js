@@ -14,6 +14,7 @@ import {useSnackbar} from "notistack";
 const Classify = () => {
     const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Unprocessed"
     const [loadedVideos, setLoadedVideos] = useState();
+    const [videoName, setVideoName] = useState();
     const {enqueueSnackbar} = useSnackbar();
     const [isLoading, setLoading] = useState(true)
     const [videoFilePath, setVideoFilePath] = useState(null);
@@ -32,11 +33,25 @@ const Classify = () => {
 
 
     function detectionClick() {
+        console.log('Detection Pressed')
+        // console.log(videoName)
         setdetectBtnloading(true);
+        axios.get(`http://localhost:8000/api/v1/public/process-videoUrl/` + videoName).then(r =>{
+            console.log(r)
+            setdetectBtnloading(false);
+        })
     }
 
     function recognitionClick() {
+        console.log('Action Pressed')
         setclassifyBtnloading(true);
+        axios.get(`http://localhost:9000/api/v1/public/classify-videoUrl/` + videoName).then(r =>{
+            console.log(r)
+            setclassifyBtnloading(false);
+        })
+        //    Step1: Get video name from state
+        //    Step2: Create endpoint using axios with video name
+        //    Step3: Set classification button loading to false
     }
 
     const handleClickVariant = (variant) => () => {
@@ -85,6 +100,7 @@ const Classify = () => {
                                                    setClassification(video.videoClassifyUrl)
                                                    setDetection(video.videoDetectUrl)
                                                    setAssigned(video.videoAssignedName)
+                                                   setVideoName(video.videoName)
 
 
                                                    setDetectionUrl(video.videoDetectUrl)
