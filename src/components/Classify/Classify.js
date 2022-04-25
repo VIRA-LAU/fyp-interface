@@ -1,5 +1,5 @@
 import Navbar from "../Navbar/Navbar";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {Grid, List, Stack, ThemeProvider, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
@@ -9,13 +9,13 @@ import SendIcon from '@mui/icons-material/Send';
 import {LoadingButton} from "@mui/lab";
 import {createTheme} from '@material-ui/core/styles'
 import {useSnackbar} from "notistack";
+import ButtonsContext from "./ButtonsContext";
 
 
 const Classify = () => {
     const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Unprocessed"
     const [loadedVideos, setLoadedVideos] = useState();
     const [videoName, setVideoName] = useState();
-    const {enqueueSnackbar} = useSnackbar();
     const [isLoading, setLoading] = useState(true)
     const [videoFilePath, setVideoFilePath] = useState(null);
 
@@ -26,32 +26,54 @@ const Classify = () => {
     const [classification, setClassification] = useState(null);
     const [assigned, setAssigned] = useState(null);
 
+        const {enqueueSnackbar} = useSnackbar();
 
 
-    const [detectBtnloading, setdetectBtnloading] = useState(false);
-    const [classifyBtnloading, setclassifyBtnloading] = useState(false);
+        const {
+            detectVideo,
+            setDetectVideo,
+            detectBtnloading,
+            setdetectBtnloading,
+            classifyVideo,
+            setClassifyVideo,
+            classifyBtnloading,
+            setclassifyBtnloading
+        } = useContext(ButtonsContext)
+        // const [detectBtnloading, setdetectBtnloading] = useState(false);
+        // const [classifyBtnloading, setclassifyBtnloading] = useState(false);
 
 
     function detectionClick() {
-        console.log('Detection Pressed')
+        console.log('Detection Pressed');
         // console.log(videoName)
         setdetectBtnloading(true);
-        axios.get(`http://localhost:8000/api/v1/public/process-videoUrl/` + videoName).then(r =>{
-            console.log(r)
-            setdetectBtnloading(false);
-        })
+        if (!detectBtnloading) {
+            setDetectVideo(videoName)
+            axios.get(`http://localhost:8000/api/v1/public/process-videoUrl/` + videoName).then(r => {
+                    console.log(r);
+                    setdetectBtnloading(false);
+                }).catch(() => {
+                setdetectBtnloading(false);
+            })
+        } else {
+            enqueueSnackbar('Another video is being processed!', {variant: "warning"})
+        }
     }
 
     function recognitionClick() {
-        console.log('Action Pressed')
+        console.log('Action Pressed');
         setclassifyBtnloading(true);
-        axios.get(`http://localhost:9000/api/v1/public/classify-videoUrl/` + videoName).then(r =>{
-            console.log(r)
-            setclassifyBtnloading(false);
-        })
-        //    Step1: Get video name from state
-        //    Step2: Create endpoint using axios with video name
-        //    Step3: Set classification button loading to false
+        if (!classifyBtnloading) {
+            setClassifyVideo(videoName)
+            axios.get(`http://localhost:9000/api/v1/public/classify-videoUrl/` + videoName).then(r => {
+                console.log(r);
+                setclassifyBtnloading(false);
+            }).catch(() => {
+                setclassifyBtnloading(false);
+            })
+        } else {
+            enqueueSnackbar('Another video is being classified!', {variant: "warning"})
+        }
     }
 
     const handleClickVariant = (variant) => () => {
@@ -162,7 +184,7 @@ const Classify = () => {
                                             size="small"
                                             color={detectionUrl === null ? "success" : "error"}
                                             onClick={detectionClick}
-                                            loading={detectBtnloading}
+                                            loading={videoName === detectVideo ? detectBtnloading : false}
                                             loadingPosition="start"
                                             startIcon={<SendIcon/>}
                                             variant="contained"
@@ -175,7 +197,7 @@ const Classify = () => {
                                             size="small"
                                             color={recognitionUrl === null ? "success" : "error"}
                                             onClick={recognitionClick}
-                                            loading={classifyBtnloading}
+                                            loading={videoName === classifyVideo ? classifyBtnloading : false}
                                             loadingPosition="start"
                                             startIcon={<SendIcon/>}
                                             style={{width: '20%'}}
