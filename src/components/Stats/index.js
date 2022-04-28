@@ -84,25 +84,7 @@ const Stats = () => {
     }, [playerId,email])
 
 
-    // const [state, setState] = useState({
-    //     ballInHandPercentage: "",
-    //     dribblePercentage: "",
-    //     fieldGoalPrecentage:"",
-    //     noActionPercentage:"",
-    //     numberOfShots: "",
-    //     numberOfShotsMade: "",
-    //     shootingPercentage: "",
-    //   });
 
-    // const [profile, setProfile] = useState({
-    //     email: "",
-    //     firstName: "",
-    //     imageUrl: "",
-    //     lastName: "",
-    //     objectDetections: null,
-    //     playerId: "",
-    //     statistics: null,
-    // })
 
     const getStats = async (playerId) => {
         var statsPerVideo = await axios.get(statsUrl + playerId)
@@ -118,17 +100,7 @@ const Stats = () => {
         //console.log(statsPerVideo)
     }
 
-
-
-
-
     const dynamicData2 = [
-        {
-            "id": "fieldGoalPrecentage",
-            "label": "fieldGoalPrecentage",
-            "value": fieldGoalPrecentage,
-            "color": "hsl(177, 70%, 50%)"
-        },
         {
             "id": "numberOfShots",
             "label": "numberOfShots",
@@ -141,14 +113,8 @@ const Stats = () => {
             "value": numberOfShotsMade,
             "color": "hsl(181, 12%, 50%)"
         },
-        {
-            "id": "ballInHandPercentage",
-            "label": "ballInHandPercentage  ",
-            "value": ballInHandPercentage,
-            "color": "hsl(172, 32%, 50%)"
-        }
-    ]
 
+    ]
 
 
     const dynamicData1 = [
@@ -292,6 +258,40 @@ const Stats = () => {
         }
     }
 
+    const getProfile = () =>{
+        if (!loading) {
+            if (playerId) {
+                    return (
+
+                            <div className="form-container registration-container">
+                                <div className="overlay">
+                                    <div >
+                                        <img src={imageUrl} className="playerImg"></img>
+                                    </div>
+                                    <div className="dataContainer">
+                                        <div><b>First Name:</b> {firstName}</div>
+                                        <div><b>Last Name:</b> {lastName}</div>
+                                        <div><b>Email:</b> {email}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    )
+            } else if (!playerId) {
+                <div> Player Has No Profile</div>
+            } else {
+                <div></div>
+            }
+        } else {
+            return (
+                <div style = {{display: "flex", justifyContent: "center"}}>
+                    <CircularProgress disableShrink />;
+                </div>
+            )
+        }
+
+    }
+
     return (
         <section className="home">
             <nav>
@@ -315,10 +315,11 @@ const Stats = () => {
                     <Autocomplete
                         inputProps={{
                             style: {
-                                width: '300px', height: '20px',
+                                width: '150px', height: '20px',
                                 background: 'white',
                                 border: '2px outset lightgray',
-                                color: "white"
+                                color: "white",
+                                paddingTop:"150px",
                             },
                             placeholder: 'Search language'
                         }}
@@ -341,31 +342,61 @@ const Stats = () => {
                                        size="small"
                                        variant="filled"
                                        label="Player Name"
+
                             />
                         )}/>
                 </Grid>
 
+
+
                 <Grid item xs>
-                    
+
                 </Grid>
+
+
+
+
+
+
+
+
+
+
             </Grid>
 
             <Grid container spacing={3}>
-                <div style={{height: "400px"}}>
-                    <CustomPieChart data={dynamicData1}/>
-                </div>
+
                 <Grid item xs>
-                    {getPercentageChart()}
                 </Grid>
+
+
                 <Grid item xs>
 
+                    <div className="player-container" id="player-container" style={{justifyContent: "center", paddingLeft:"150px"}}>
+                    {getProfile()}
+                    </div>
                 </Grid>
+
                 <Grid item xs>
-                     <div style={{height: "400px"}}>
-                    {getShotMadePercentage()}
-                </div>
+                </Grid>
+
+                <Grid container spacing={3}>
+                    <div style={{height: "400px"}}>
+                        <CustomPieChart data={dynamicData1}/>
+                    </div>
+                    <Grid item xs>
+                        {getPercentageChart()}
+                    </Grid>
+
+                    <Grid item xs>
+                        <div style={{height: "400px"}}>
+                            {getShotMadePercentage()}
+                        </div>
+                </Grid>
                 </Grid>
             </Grid>
+
+
         </section>
     );
 };

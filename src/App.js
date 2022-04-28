@@ -15,8 +15,8 @@ import './App.css'
 import {Route, Routes} from "react-router-dom";
 import Layout from "./layouts";
 import Stats from "./components/Stats";
-import Systems from "./components/Systems";
-import AddSystems from "./components/AddSystems";
+// import Systems from "./components/Systems";
+// import AddSystems from "./components/AddSystems";
 
 
 const App = () => {
@@ -102,8 +102,8 @@ const App = () => {
 
                     <Route index element={<Home handleLogout={handleLogout} />} />
                     <Route path="/stats" element={<Stats />} />
-                    <Route path="/systems" element={<Systems />} />
-                    <Route path="/add-systems" element={<AddSystems />} />
+                    {/*<Route path="/systems" element={<Systems />} />*/}
+                    {/*<Route path="/add-systems" element={<AddSystems />} />*/}
 
                 </Routes>
             ) : (
