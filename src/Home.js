@@ -10,6 +10,7 @@ const Home = ({handleLogout}) => {
                 <h2>Welcome</h2>
                 <button onClick={handleLogout}>Logout</button>
                 <button onClick={ () => navigate("../stats", { replace: true })}>Stats</button>
+                <button onClick={() => navigate("../systems", {replace: true})}>Systems</button>
                 <button>Classify</button>
             </nav>
             <Video />
