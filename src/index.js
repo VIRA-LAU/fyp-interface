@@ -3,6 +3,7 @@ import ReactDom from "react-dom";
 import App from "./App";
 import {BrowserRouter} from "react-router-dom";
 import {SnackbarProvider} from "notistack";
+import {ModelButtons} from "./components/Classify/ButtonsContext";
 
 
 function Greeting(){
@@ -10,7 +11,9 @@ function Greeting(){
 
             <BrowserRouter>
                 <SnackbarProvider maxSnack={3}>
-            <App/>
+                    <ModelButtons>
+                        <App/>
+                    </ModelButtons>
                 </SnackbarProvider>
 
             </BrowserRouter>
