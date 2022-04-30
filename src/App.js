@@ -16,6 +16,7 @@ import {Route, Routes} from "react-router-dom";
 import Layout from "./layouts";
 import Stats from "./components/Stats";
 import Players from "./components/Players/index";
+import Systems from "./components/Systems";
 import Classify from "./components/Classify/Classify";
 
 
@@ -72,7 +73,6 @@ const App = () => {
             });
     };
 
-
     const authListener = () => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -98,6 +98,7 @@ const App = () => {
                     <Route index element={<Home/>}/>
                     <Route path="/stats" element={<Stats/>}/>
                     <Route path="/players" element={<Players/>}/>
+                    <Route path="/systems" element={<Systems />} />
                     <Route path="/classify" element={<Classify/>}/>
                 </Routes>
             ) : (
