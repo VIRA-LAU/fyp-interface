@@ -1,0 +1,40 @@
+
+.playerImg{
+    margin-top: 25%;
+    height: 50%;
+    width: 50%;
+    justify-content: center;
+    display: flex;
+}
+.dataContainer{
+    color: white;
+    margin-top: 3%;
+    margin-left: 15%;
+    justify-content: center;
+}
+.home nav {
+    background: #603bbb;
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.home nav h2 {
+    color: #fff;
+}
+.home nav button {
+    width: 86px;
+    padding: 8px 0;
+    background: #3a2b58;
+}
+.player {
+    padding: 24px 0;
+    position: center;
+}
+.profile-container{
+    background-color: #603bbb;
+    border-radius: 30px;
+    justify-content: center;
+    display: flex;
+}

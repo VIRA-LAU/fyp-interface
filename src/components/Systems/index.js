@@ -3,6 +3,7 @@ import {Component, useEffect, useState, useMemo} from "react";
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import {useNavigate} from "react-router-dom";
+import Navbar from "../Navbar/Navbar";
 
 
 const Systems = () => {
@@ -34,14 +35,7 @@ const Systems = () => {
     let navigate = useNavigate();
     return(
         <section className="home">
-            <nav>
-                <h2>Welcome</h2>
-                <button onClick={ () => navigate("../", { replace: true })}>Home</button>
-                <button onClick={ () => navigate("../stats", { replace: true })}>Stats</button>
-                <button onClick={ () => navigate("../players", { replace: true })}>Players</button>
-                <button onClick={ () => navigate("../systems", { replace: true })}>Systems</button>
-                <button>Classify</button>
-            </nav>
+            <Navbar />
 
             <div style={{ height: 450, width: '100%', marginTop: 16, color: 'white'}}>
             <DataGrid style={{color: 'white'}}

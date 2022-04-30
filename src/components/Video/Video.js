@@ -111,7 +111,7 @@ function Video() {
     }
 
     return (
-        <div className={"video-page-container"}>}
+        <div className={"video-page-container"}>
             <Swiper
                 effect={"coverflow"}
                 grabCursor={true}
