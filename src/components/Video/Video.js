@@ -16,11 +16,14 @@ import './Video.css';
 import axios from "axios";
 import VideoItem from "../Videos/VideoItem";
 import PlayerAssignment from "../PlayerAssignment/PlayerAssignment";
+import CustomPieChart from "../charts/pieChart";
+import CircularProgress from "@mui/material/CircularProgress";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
 function Video() {
     const theme = useTheme()
+    const statsUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/action-stats/getBy/";
     const [profiles, setProfiles] = useState("");
     const isSmall = useMediaQuery(theme.breakpoints.down('md'));
     const [videos, setVideos] = useState();
@@ -31,6 +34,16 @@ function Video() {
     const [videoId, setVideoId] = useState(null);
     const [playerId, setPlayerId] = useState("");
     const [playerName, setPlayerName] = useState("");
+    const [isLoading, setLoading] = useState(true);
+
+    //User Stats to be Displayed in PieChart
+    const [ballInHandPercentage,setBallInHandPercentage]=useState();
+    const [dribblePercentage,setDribblePercentage] = useState();
+    const [noActionPercentage,setNoActionPercentage] = useState();
+    const [shootingPercentage,setShootingPercentage] =useState();
+    const [numberOfShots, setNumberOfShots] = useState();
+    const [numberOfShotsMade, setNumberOfShotsMade] = useState();
+    const [statsExist, setStatsExist] = useState(false);
 
     const videoUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/{videoId}/{detectionTrackingId}/{playerId}";
 
@@ -41,12 +54,131 @@ function Video() {
         const vid_response = await axios.get("https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Videos-Info");
         setVideos(vid_response);
         console.log(vid_response);
-    }, [])
+        setLoading(false);
+    }, [videoId])
 
 
     async function handleOnClick(e){
         console.log("");
     }
+
+    const getStats = async (videoId) => {
+        var statsPerVideo = await axios.get(statsUrl + videoId);
+        setShootingPercentage(statsPerVideo.data.shootingPercentage.substring(0, statsPerVideo.data.shootingPercentage.length-1));
+        setDribblePercentage(statsPerVideo.data.dribblePercentage.substring(0, statsPerVideo.data.dribblePercentage.length-1));
+        setNoActionPercentage(statsPerVideo.data.noActionPercentage.substring(0, statsPerVideo.data.noActionPercentage.length-1));
+        setBallInHandPercentage(statsPerVideo.data.ballInHandPercentage.substring(0, statsPerVideo.data.ballInHandPercentage.length-1));
+        setNumberOfShots(statsPerVideo.data.numberOfShots);
+        setNumberOfShotsMade(statsPerVideo.data.numberOfShotsMade);
+        console.log("Updating stats!!!");
+    }
+
+    const dynamicData2 = [
+        {
+            "id": "numberOfShotsMissed",
+            "label": "numberOfShotsMissed",
+            "value": numberOfShots-numberOfShotsMade,
+            "color": "hsl(181, 12%, 50%)"
+        },
+        {
+            "id": "numberOfShotsMade",
+            "label": "numberOfShotsMade",
+            "value": numberOfShotsMade,
+            "color": "hsl(181, 12%, 50%)"
+        },
+
+    ]
+
+
+    const dynamicData1 = [
+        {
+            "id": "shootingPercentange",
+            "label": "shootingPercentange",
+            "value": shootingPercentage,
+            "color": "hsl(177, 70%, 50%)"
+        },
+        {
+            "id": "dribblePercentage",
+            "label": "dribblePercentage",
+            "value": dribblePercentage,
+            "color": "hsl(172, 70%, 50%)"
+        },
+        {
+            "id": "NoActionPercentage",
+            "label": "NoActionPercentage",
+            "value": noActionPercentage,
+            "color": "hsl(181, 12%, 50%)"
+        },
+        {
+            "id": "ballInHandPercentage",
+            "label": "ballInHandPercentage  ",
+            "value": ballInHandPercentage,
+            "color": "hsl(172, 32%, 50%)"
+        }
+    ]
+
+
+    function getPercentageChart(videoId, statsExists){
+        if (!isLoading) {
+            if (videoId) {
+                if(statsExists) {
+                    return (
+                        <div style={{height: "400px"}}>
+                            <CustomPieChart data={dynamicData1}/>
+                        </div>
+                    )
+                } else {
+                    return (
+                        <h1 style={{display: "flex", justifyContent: "center", color: "black"}}>
+                            No Stats Found
+                        </h1>
+                    )
+                }
+
+            }
+            else {
+                <div></div>
+            }
+        } else {
+            return (
+                <div style = {{display: "flex", justifyContent: "center"}}>
+                    <CircularProgress disableShrink />
+                </div>
+            )
+        }
+    }
+
+    function getShotMadePercentage(videoId, statsExists) {
+        if (!isLoading) {
+            if (videoId) {
+                if(statsExists) {
+                    return (
+                        <div style={{height: "400px"}}>
+                            <CustomPieChart data={dynamicData2}/>
+                        </div>
+                    )
+                } else {
+                    return (
+                        <h1 style={{display: "flex", justifyContent: "center", color: "black"}}>
+                            No Stats Found
+                        </h1>
+                    )
+                }
+
+            } else if (videoId) {
+                <div> Video Has No Stats</div>
+            } else {
+                <div></div>
+            }
+        } else {
+            return (
+                <div style = {{display: "flex", justifyContent: "center"}}>
+                    <CircularProgress disableShrink />
+                </div>
+            )
+        }
+    }
+
 
 
     const renderSwiper = () => {
@@ -96,6 +228,8 @@ function Video() {
                                                    setRecognitionUrl(video.videoClassifyUrl)
                                                    setPersonId(() => {return video.personId===null? "No tracking" : video.personId})
                                                    setVideoId(video.videoId)
+                                                   setStatsExist(video.videoClassifyUrl === null ? false : true);
+                                                   getStats(video.videoId);
                                                }}
                                     />
                                 );
@@ -186,6 +320,9 @@ function Video() {
                 </Grid>
             </div>
             <PlayerAssignment videoFilePath={videoFilePath} profiles={profiles} personId ={personId} videoId={videoId} playerId={playerId} playerName={playerName}/>
+
+            {getShotMadePercentage(videoId, statsExist)}
+            {getPercentageChart(videoId, statsExist)}
         </div>
     )
 }

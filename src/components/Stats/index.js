@@ -80,7 +80,7 @@ const Stats = () => {
     const getFieldGoalPercentage = () => {
         if(statsExists) {
             return (
-                <div><b>Shooting Percentage:</b> {fieldGoalPrecentage + "%"}</div>
+                <div><b>Shooting Accuracy:</b> {fieldGoalPrecentage + "%"}</div>
             )
         }
     }

@@ -10,10 +10,14 @@ import {LoadingButton} from "@mui/lab";
 import {createTheme} from '@material-ui/core/styles'
 import {useSnackbar} from "notistack";
 import ButtonsContext from "./ButtonsContext";
+import CustomPieChart from "../charts/pieChart";
+import CircularProgress from "@mui/material/CircularProgress";
+import {RingLoader} from "react-spinners";
 
 
 const Classify = () => {
-    const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Unprocessed"
+    const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Videos-Info";
+
     const [loadedVideos, setLoadedVideos] = useState();
     const [videoName, setVideoName] = useState();
     const [isLoading, setLoading] = useState(true)
@@ -26,7 +30,9 @@ const Classify = () => {
     const [classification, setClassification] = useState(null);
     const [assigned, setAssigned] = useState(null);
 
-        const {enqueueSnackbar} = useSnackbar();
+
+
+    const {enqueueSnackbar} = useSnackbar();
 
 
         const {
@@ -39,8 +45,6 @@ const Classify = () => {
             classifyBtnloading,
             setclassifyBtnloading
         } = useContext(ButtonsContext)
-        // const [detectBtnloading, setdetectBtnloading] = useState(false);
-        // const [classifyBtnloading, setclassifyBtnloading] = useState(false);
 
 
     function detectionClick() {
@@ -87,9 +91,11 @@ const Classify = () => {
         setLoading(true)
         const response = await axios.get(url);
         setLoadedVideos(response);
-        setLoading(false)
+        setLoading(false);
 
         console.log(response)
+
+
 
     }, [])
 
@@ -100,7 +106,9 @@ const Classify = () => {
                 disabled: 'white'
             }
         }
-    })
+    });
+
+
 
     const renderVideos = () => {
         console.log("rendered again")
@@ -109,8 +117,8 @@ const Classify = () => {
             return (
                 <Box sx={{display: 'flex', width: '100%', minWidth: 250, bgcolor: 'background.paper'}}>
 
-                    <nav aria-label="main mailbox folders">
-                        <List>
+                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row'}}>
+                        <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {loadedVideos.data.map((video) => {
                                 return (
                                     <VideoItem key={video.videoId} videoId={video.videoId} videoName={video.videoName}
@@ -123,12 +131,12 @@ const Classify = () => {
                                                    setDetection(video.videoDetectUrl)
                                                    setAssigned(video.videoAssignedName)
                                                    setVideoName(video.videoName)
-
-
                                                    setDetectionUrl(video.videoDetectUrl)
                                                    setRecognitionUrl(video.videoClassifyUrl)
+
                                                    console.log("video clicked is " + video.videoName)
                                                    console.log("detection", detection)
+
                                                }}
                                     />
                                 );
@@ -145,8 +153,9 @@ const Classify = () => {
 
     if (isLoading) {
         return (
-            <section>
-                <p>Loading ...</p>
+            <section style={{marginLeft: "45%", marginTop: "15%"}}>
+                {/*<p>Loading ...</p>*/}
+                <RingLoader color="#603bbb" size={150} />
             </section>
         )
     }
@@ -209,6 +218,7 @@ const Classify = () => {
                                     </Stack>
                                 </ThemeProvider>
                             </Grid>
+
                         </>
                     }
 
@@ -277,6 +287,8 @@ const Classify = () => {
                     }
 
                 </Grid>
+
+
 
             </div>
         </section>
