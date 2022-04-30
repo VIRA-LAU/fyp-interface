@@ -22,6 +22,7 @@ const Navbar = () => {
             <button onClick={ () => navigate("../stats", { replace: true })}>Stats</button>
             <button onClick={ () => navigate("../players", { replace: true })}>Players</button>
             <button onClick={ () => navigate("../classify", {replace: true})}>Classify</button>
+            <button onClick={ () => navigate("../systems", {replace: true})}>Systems</button>
         </nav>
 
     );
