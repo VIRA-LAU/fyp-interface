@@ -44,7 +44,7 @@ const Systems = () => {
             <section style={{marginLeft: "45%", marginTop: "15%"}}>
                 <RingLoader color="#603bbb" size={150} />
             </section>
-        )ss
+        )
     }
     return(
         <section className="home2">
