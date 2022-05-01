@@ -263,13 +263,17 @@ input{
 }
 
 .MuiTablePagination-displayedRows{
-    color: white;
+    color: black;
+}
+
+.MuiDataGrid-columnHeadersInner{
+    font-weight: 900;
 }
 
 .MuiTablePagination-actions{
-    color: white;
+    color: black;
 }
 
 .MuiSvgIcon-root{
-    color: white;
+    color: black;
 }
