@@ -289,7 +289,7 @@ const Stats = () => {
     }
 
     return (
-        <section className="home">
+        <section className="home2">
             <Navbar />
 
             <div style={{color: "white", display: "flex", justifyContent: "center", paddingTop: "15px"}}>

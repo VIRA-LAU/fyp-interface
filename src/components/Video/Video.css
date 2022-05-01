@@ -1,7 +1,22 @@
 .video-page-container{
-    padding: 5% 10%
+    padding: 5% 10%;
 }
 
 .MuiOutlinedInput-notchedOutline {
     border: hidden !important;
+}
+
+.generateBtn {
+    color: white;
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    height: 60px;
+    border-radius: 30px;
+    font-size: 1em;
+    background-color: #603bbb;
+}
+.generateBtn:hover {
+    background-color: #3a2b58;
 }

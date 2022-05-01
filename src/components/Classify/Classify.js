@@ -108,8 +108,6 @@ const Classify = () => {
         }
     });
 
-
-
     const renderVideos = () => {
         console.log("rendered again")
         console.log("video file path" + videoFilePath)
@@ -134,9 +132,6 @@ const Classify = () => {
                                                    setDetectionUrl(video.videoDetectUrl)
                                                    setRecognitionUrl(video.videoClassifyUrl)
 
-                                                   console.log("video clicked is " + video.videoName)
-                                                   console.log("detection", detection)
-
                                                }}
                                     />
                                 );
@@ -154,22 +149,19 @@ const Classify = () => {
     if (isLoading) {
         return (
             <section style={{marginLeft: "45%", marginTop: "15%"}}>
-                {/*<p>Loading ...</p>*/}
                 <RingLoader color="#603bbb" size={150} />
             </section>
         )
     }
 
     return (
-        <section className="home">
+        <section className="home2">
             <Navbar/>
             <div>
                 <Grid container  marginTop={2} spacing={3}>
                     <div style={{
                         display: 'flex'
                     }}>
-
-
 
                         {renderVideos()}
 
