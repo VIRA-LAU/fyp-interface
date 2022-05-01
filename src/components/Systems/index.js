@@ -34,7 +34,7 @@ const Systems = () => {
 
     let navigate = useNavigate();
     return(
-        <section className="home">
+        <section className="home2">
             <Navbar />
 
             <div style={{ height: 450, width: '100%', marginTop: 16, color: 'white'}}>

@@ -11,14 +11,13 @@ import {
     useTheme
 } from "@mui/material";
 import Slide from "../Slide";
-import Box from '@mui/material/Box';
-import './Video.css';
 import axios from "axios";
 import VideoItem from "../Videos/VideoItem";
 import PlayerAssignment from "../PlayerAssignment/PlayerAssignment";
 import CustomPieChart from "../charts/pieChart";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
+import './Video.css';
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
@@ -161,10 +160,10 @@ function Video() {
 
     function getButton() {
         if(detectionUrl && recognitionUrl) {
-            return <Button onClick={generateStats}> Generate Stats</Button>;
+            return <Button  className="generateBtn" onClick={generateStats}> Generate Stats</Button>;
         }
         else{
-            return <Button disabled>Not Enough Data</Button>;
+            return <Button className="generateBtn" disabled>Not Enough Data</Button>;
         }
     }
 
@@ -228,12 +227,9 @@ function Video() {
     }
 
     const renderVideos = () => {
-        console.log("rendered again")
-        console.log("video file path" + videoFilePath)
         if (videos) {
             return (
-                <Box sx={{display: 'flex', width: '100%', bgcolor: 'background.paper', flex: 1}}>
-                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row'}}>
+                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row', borderRadius: "20px"}}>
                         <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {videos.data.map((video) => {
                                 return (
@@ -255,7 +251,6 @@ function Video() {
                             })}
                         </List>
                     </nav>
-                </Box>
             );
         } else {
             return <>
@@ -304,7 +299,7 @@ function Video() {
                             <Grid item xs={4}>
                                 <Typography textAlign={"center"}
                                             sx={{
-                                                color: 'white'
+                                                color: 'black'
                                             }}
                                             variant={"h5"}>
                                     Raw Video
@@ -315,7 +310,7 @@ function Video() {
                             <Grid item xs={4}>
                                 <Typography textAlign={"center"}
                                             sx={{
-                                                color: 'white'
+                                                color: 'black'
                                             }}
                                             variant={"h5"}>
                                     Detection Video
@@ -326,7 +321,7 @@ function Video() {
                             <Grid item xs={4}>
                                 <Typography textAlign={"center"}
                                             sx={{
-                                                color: 'white'
+                                                color: 'black'
                                             }}
                                             variant={"h5"}>
                                     Classification Video
