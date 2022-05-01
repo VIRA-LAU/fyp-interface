@@ -113,10 +113,17 @@ const Classify = () => {
         console.log("video file path" + videoFilePath)
         if (loadedVideos) {
             return (
-                <Box sx={{display: 'flex', width: '100%', minWidth: 250, bgcolor: 'background.paper'}}>
+                <div
+                    style={{
+                        padding: '10px 200px'
+                    }}
+                >
+                    <div style={{
+                        display: 'flex'
 
-                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row'}}>
-                        <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
+                    }}>
+                <nav aria-label="main mailbox folders" style={{flexDirection: 'row', borderRadius: "20px", display: "flex", width: "1000px"}}>
+                    <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {loadedVideos.data.map((video) => {
                                 return (
                                     <VideoItem key={video.videoId} videoId={video.videoId} videoName={video.videoName}
@@ -138,7 +145,8 @@ const Classify = () => {
                             })}
                         </List>
                     </nav>
-                </Box>
+                    </div>
+                </div>
             );
         } else {
             return <>
@@ -177,10 +185,10 @@ const Classify = () => {
                                             variant={"h5"}>
                                     Raw Video
                                 </Typography>
-                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                <ReactPlayer style={{display: "flex", marginLeft: "37%"}} playing={true} muted={true} width={"50%"} className="player" controls
                                              url={videoFilePath}/>
                                 <ThemeProvider theme={theme}>
-                                    <Stack style={{justifyContent: "center"}} spacing={2} direction="row">
+                                    <Stack style={{justifyContent: "center", marginLeft: "25%"}} spacing={2} direction="row">
                                         <LoadingButton
                                             size="small"
                                             color={detectionUrl === null ? "success" : "error"}
@@ -216,7 +224,7 @@ const Classify = () => {
 
 
                 </Grid>
-                <Grid style = {{display: 'flex', justifyContent: 'end', paddingRight:'115px'}} container  marginTop={3} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'115px'}} container  marginTop={3} spacing={3}>
                 {
                     videoFilePath && detection &&
                     <>
@@ -230,7 +238,7 @@ const Classify = () => {
                                 Detection Video
                             </Typography>
 
-                            <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                            <ReactPlayer style={{marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
                                          url={detection}/>
                             </div>
                         </Grid>
@@ -239,7 +247,7 @@ const Classify = () => {
 
                 </Grid>
 
-                <Grid style = {{display: 'flex', justifyContent: 'end', paddingRight:'115px'}}  container marginTop={3} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'115px'}}  container marginTop={3} spacing={3}>
                     {
                         videoFilePath && classification &&
                         <>
@@ -251,7 +259,7 @@ const Classify = () => {
                                             variant={"h5"}>
                                     Classification Video
                                 </Typography>
-                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                <ReactPlayer style={{marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
                                              url={classification}/>
                             </Grid>
                         </>
@@ -260,7 +268,7 @@ const Classify = () => {
                 </Grid>
 
 
-                <Grid style = {{display: 'flex', justifyContent: 'end', paddingRight:'115px'}}  container marginTop={5} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'115px'}}  container marginTop={5} spacing={3}>
                     {
                         videoFilePath && assigned &&
                         <>
@@ -272,7 +280,7 @@ const Classify = () => {
                                             variant={"h5"}>
                                     Assigned Video
                                 </Typography>
-                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                <ReactPlayer style={{marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
                                              url={assigned}/>
                             </Grid>
                         </>

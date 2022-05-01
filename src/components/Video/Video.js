@@ -18,6 +18,7 @@ import CustomPieChart from "../charts/pieChart";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import './Video.css';
+import {RingLoader} from "react-spinners";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
@@ -197,6 +198,16 @@ function Video() {
             )
         }
     }
+
+    if (isLoading) {
+        return (
+            <section style={{marginLeft: "45%", marginTop: "15%"}}>
+                <RingLoader color="#603bbb" size={150} />
+            </section>
+        )
+    }
+
+
 
 
 
