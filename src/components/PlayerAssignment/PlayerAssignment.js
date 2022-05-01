@@ -63,14 +63,13 @@ function PlayerAssignment(props) {
     function getButton() {
         console.log(props.personId)
 
-
         if (isVideoAndPlayerNotSelected()) {
-            return (<div style={{paddingTop: "25px", color: "white"}}>
+            return (<div style={{paddingTop: "25px", color: "red"}}>
                     A Video And Person Needed To Be Selected First
                 </div>
             )
         } else if (isVideoNotSelected()) {
-            return (<div style={{paddingTop: "25px", color: "white"}}>
+            return (<div style={{paddingTop: "25px", color: "red"}}>
                     Select A Video
                 </div>
             )
@@ -85,14 +84,13 @@ function PlayerAssignment(props) {
                 </div>
             )
         } else {
-            return <Button
+            return <button
                 className= "assignBtn"
-
                 variant="contained"
                 onClick={assign('success')}
             >
                 Assign
-            </Button>;
+            </button>;
         }
     }
 

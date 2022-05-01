@@ -160,10 +160,10 @@ function Video() {
 
     function getButton() {
         if(detectionUrl && recognitionUrl) {
-            return <Button  className="generateBtn" onClick={generateStats}> Generate Stats</Button>;
+            return <button  className="generateBtn" onClick={generateStats}> Generate Stats</button>;
         }
         else{
-            return <Button className="generateBtn" disabled>Not Enough Data</Button>;
+            return <button className="generateBtn" disabled>Not Enough Data</button>;
         }
     }
 

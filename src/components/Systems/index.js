@@ -37,8 +37,8 @@ const Systems = () => {
         <section className="home2">
             <Navbar />
 
-            <div style={{ height: 450, width: '100%', marginTop: 16, color: 'white'}}>
-            <DataGrid style={{color: 'white'}}
+            <div style={{ height: 450, width: '100%', marginTop: 16, color: 'black'}}>
+            <DataGrid style={{color: 'black'}}
                 rows={rows}
                 columns={columns}
                 pageSize={5}

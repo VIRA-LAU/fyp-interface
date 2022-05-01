@@ -26,13 +26,12 @@
 
 .assignBtn {
     color: white;
-    min-width: 45%;
-    max-width: 45%;
+    width: 25%;
     align-self: center;
     margin-top: 25px;
     height: 60px;
     border-radius: 30px;
-    font-size: 1em;
+    font-size: 1.5em;
     background-color: #603bbb;
 }
 

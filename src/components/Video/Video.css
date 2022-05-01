@@ -8,13 +8,15 @@
 
 .generateBtn {
     color: white;
-    width: 25%;
-    display: flex;
+    width: 15%;
+    align-items: center;
+    align-self: center;
     justify-content: center;
-    margin-top: 25px;
+    display: flex;
+    margin: 25px auto auto;
     height: 60px;
     border-radius: 30px;
-    font-size: 1em;
+    font-size: 1.2em;
     background-color: #603bbb;
 }
 .generateBtn:hover {
