@@ -16,7 +16,7 @@ import {RingLoader} from "react-spinners";
 
 
 const Classify = () => {
-    const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Videos-Info";
+    const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Unprocessed";
 
     const [loadedVideos, setLoadedVideos] = useState();
     const [videoName, setVideoName] = useState();

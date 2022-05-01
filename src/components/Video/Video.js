@@ -18,12 +18,14 @@ import VideoItem from "../Videos/VideoItem";
 import PlayerAssignment from "../PlayerAssignment/PlayerAssignment";
 import CustomPieChart from "../charts/pieChart";
 import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
 function Video() {
     const theme = useTheme()
     const statsUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/action-stats/getBy/";
+    const generateUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/action-stats/generate/";
     const [profiles, setProfiles] = useState("");
     const isSmall = useMediaQuery(theme.breakpoints.down('md'));
     const [videos, setVideos] = useState();
@@ -63,14 +65,24 @@ function Video() {
     }
 
     const getStats = async (videoId) => {
-        var statsPerVideo = await axios.get(statsUrl + videoId);
-        setShootingPercentage(statsPerVideo.data.shootingPercentage.substring(0, statsPerVideo.data.shootingPercentage.length-1));
-        setDribblePercentage(statsPerVideo.data.dribblePercentage.substring(0, statsPerVideo.data.dribblePercentage.length-1));
-        setNoActionPercentage(statsPerVideo.data.noActionPercentage.substring(0, statsPerVideo.data.noActionPercentage.length-1));
-        setBallInHandPercentage(statsPerVideo.data.ballInHandPercentage.substring(0, statsPerVideo.data.ballInHandPercentage.length-1));
-        setNumberOfShots(statsPerVideo.data.numberOfShots);
-        setNumberOfShotsMade(statsPerVideo.data.numberOfShotsMade);
+        var statsPerVideo = await axios.get(statsUrl + videoId).catch(function (e){
+            setStatsExist(false);
+        });
+        if(statsPerVideo.status == 200){
+            setStatsExist(true);
+            setShootingPercentage(statsPerVideo.data.shootingPercentage.substring(0, statsPerVideo.data.shootingPercentage.length-1));
+            setDribblePercentage(statsPerVideo.data.dribblePercentage.substring(0, statsPerVideo.data.dribblePercentage.length-1));
+            setNoActionPercentage(statsPerVideo.data.noActionPercentage.substring(0, statsPerVideo.data.noActionPercentage.length-1));
+            setBallInHandPercentage(statsPerVideo.data.ballInHandPercentage.substring(0, statsPerVideo.data.ballInHandPercentage.length-1));
+            setNumberOfShots(statsPerVideo.data.numberOfShots);
+            setNumberOfShotsMade(statsPerVideo.data.numberOfShotsMade);
+        }
+
         console.log("Updating stats!!!");
+    }
+
+    async function generateStats(){
+        await axios.get(generateUrl + videoId);
     }
 
     const dynamicData2 = [
@@ -130,7 +142,6 @@ function Video() {
                 } else {
                     return (
                         <h1 style={{display: "flex", justifyContent: "center", color: "black"}}>
-                            No Stats Found
                         </h1>
                     )
                 }
@@ -148,6 +159,15 @@ function Video() {
         }
     }
 
+    function getButton() {
+        if(detectionUrl && recognitionUrl) {
+            return <Button onClick={generateStats}> Generate Stats</Button>;
+        }
+        else{
+            return <Button disabled>Not Enough Data</Button>;
+        }
+    }
+
     function getShotMadePercentage(videoId, statsExists) {
         if (!isLoading) {
             if (videoId) {
@@ -159,9 +179,9 @@ function Video() {
                     )
                 } else {
                     return (
-                        <h1 style={{display: "flex", justifyContent: "center", color: "black"}}>
-                            No Stats Found
-                        </h1>
+                        <div>
+                            {getButton()}
+                        </div>
                     )
                 }
 
@@ -228,7 +248,6 @@ function Video() {
                                                    setRecognitionUrl(video.videoClassifyUrl)
                                                    setPersonId(() => {return video.personId===null? "No tracking" : video.personId})
                                                    setVideoId(video.videoId)
-                                                   setStatsExist(video.videoClassifyUrl === null ? false : true);
                                                    getStats(video.videoId);
                                                }}
                                     />
