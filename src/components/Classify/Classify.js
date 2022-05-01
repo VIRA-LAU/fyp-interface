@@ -114,14 +114,9 @@ const Classify = () => {
         if (loadedVideos) {
             return (
                 <div
-                    style={{
-                        padding: '10px 200px'
-                    }}
-                >
-                    <div style={{
-                        display: 'flex'
 
-                    }}>
+                >
+
                 <nav aria-label="main mailbox folders" style={{flexDirection: 'row', borderRadius: "20px", display: "flex", width: "1000px"}}>
                     <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {loadedVideos.data.map((video) => {
@@ -145,7 +140,7 @@ const Classify = () => {
                             })}
                         </List>
                     </nav>
-                    </div>
+
                 </div>
             );
         } else {
@@ -163,17 +158,21 @@ const Classify = () => {
     }
 
     return (
-        <section className="home2">
+        <div>
             <Navbar/>
             <div>
-                <Grid container  marginTop={2} spacing={3}>
+
+
                     <div style={{
-                        display: 'flex'
+                        display: 'flex',
+                        paddingTop: "35px",
+                        justifyContent: "center"
                     }}>
 
                         {renderVideos()}
 
                     </div>
+                <Grid style = {{display: 'flex'}} container  marginTop={3} spacing={3}>
                     {
                         videoFilePath &&
                         <>
@@ -224,7 +223,7 @@ const Classify = () => {
 
 
                 </Grid>
-                <Grid style = {{display: 'flex', paddingRight:'115px'}} container  marginTop={3} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'182px'}} container  marginTop={3} spacing={3}>
                 {
                     videoFilePath && detection &&
                     <>
@@ -247,7 +246,7 @@ const Classify = () => {
 
                 </Grid>
 
-                <Grid style = {{display: 'flex', paddingRight:'115px'}}  container marginTop={3} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'182px'}}  container marginTop={3} spacing={3}>
                     {
                         videoFilePath && classification &&
                         <>
@@ -268,7 +267,7 @@ const Classify = () => {
                 </Grid>
 
 
-                <Grid style = {{display: 'flex', paddingRight:'115px'}}  container marginTop={5} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'182px'}}  container marginTop={5} spacing={3}>
                     {
                         videoFilePath && assigned &&
                         <>
@@ -291,7 +290,7 @@ const Classify = () => {
 
 
             </div>
-        </section>
+        </div>
 
     );
 };
