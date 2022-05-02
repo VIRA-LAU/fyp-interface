@@ -11,19 +11,22 @@ import {
     useTheme
 } from "@mui/material";
 import Slide from "../Slide";
-import Box from '@mui/material/Box';
-import './Video.css';
 import axios from "axios";
 import VideoItem from "../Videos/VideoItem";
 import PlayerAssignment from "../PlayerAssignment/PlayerAssignment";
 import CustomPieChart from "../charts/pieChart";
 import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
+import './Video.css';
+import {RingLoader} from "react-spinners";
+import {useSnackbar} from "notistack";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
 function Video() {
     const theme = useTheme()
     const statsUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/action-stats/getBy/";
+    const generateUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/action-stats/generate/";
     const [profiles, setProfiles] = useState("");
     const isSmall = useMediaQuery(theme.breakpoints.down('md'));
     const [videos, setVideos] = useState();
@@ -45,6 +48,10 @@ function Video() {
     const [numberOfShotsMade, setNumberOfShotsMade] = useState();
     const [statsExist, setStatsExist] = useState(false);
 
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const {enqueueSnackbar} = useSnackbar();
+
+
     const videoUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/{videoId}/{detectionTrackingId}/{playerId}";
 
     useEffect(async () => {
@@ -63,14 +70,35 @@ function Video() {
     }
 
     const getStats = async (videoId) => {
-        var statsPerVideo = await axios.get(statsUrl + videoId);
-        setShootingPercentage(statsPerVideo.data.shootingPercentage.substring(0, statsPerVideo.data.shootingPercentage.length-1));
-        setDribblePercentage(statsPerVideo.data.dribblePercentage.substring(0, statsPerVideo.data.dribblePercentage.length-1));
-        setNoActionPercentage(statsPerVideo.data.noActionPercentage.substring(0, statsPerVideo.data.noActionPercentage.length-1));
-        setBallInHandPercentage(statsPerVideo.data.ballInHandPercentage.substring(0, statsPerVideo.data.ballInHandPercentage.length-1));
-        setNumberOfShots(statsPerVideo.data.numberOfShots);
-        setNumberOfShotsMade(statsPerVideo.data.numberOfShotsMade);
+        var statsPerVideo = await axios.get(statsUrl + videoId).catch(function (e){
+            setStatsExist(false);
+        });
+        if(statsPerVideo.status == 200){
+            setStatsExist(true);
+            setShootingPercentage(statsPerVideo.data.shootingPercentage.substring(0, statsPerVideo.data.shootingPercentage.length-1));
+            setDribblePercentage(statsPerVideo.data.dribblePercentage.substring(0, statsPerVideo.data.dribblePercentage.length-1));
+            setNoActionPercentage(statsPerVideo.data.noActionPercentage.substring(0, statsPerVideo.data.noActionPercentage.length-1));
+            setBallInHandPercentage(statsPerVideo.data.ballInHandPercentage.substring(0, statsPerVideo.data.ballInHandPercentage.length-1));
+            setNumberOfShots(statsPerVideo.data.numberOfShots);
+            setNumberOfShotsMade(statsPerVideo.data.numberOfShotsMade);
+        }
+
         console.log("Updating stats!!!");
+    }
+    useEffect(() => {
+        getStats(videoId)
+    }, [statsExist])
+
+    async function generateStats() {
+        setIsButtonLoading(true);
+        await axios.get(generateUrl + videoId).then(r => {
+            setStatsExist(true);
+            setIsButtonLoading(true);
+            enqueueSnackbar('Stats generated successfully!', {variant: "success"})
+        }).catch(() => {
+            setIsButtonLoading(true);
+            enqueueSnackbar('Error generating stats!', {variant: "error"})
+        })
     }
 
     const dynamicData2 = [
@@ -130,7 +158,6 @@ function Video() {
                 } else {
                     return (
                         <h1 style={{display: "flex", justifyContent: "center", color: "black"}}>
-                            No Stats Found
                         </h1>
                     )
                 }
@@ -148,20 +175,40 @@ function Video() {
         }
     }
 
+    function getButton() {
+        if(detectionUrl && recognitionUrl) {
+            return <button className="generateBtn" onClick={generateStats}> {isButtonLoading?'Generating ...':'Generate Stats'}</button>;
+        }
+        else{
+            return <button className="generateBtn" disabled>Not Enough Data</button>;
+        }
+    }
+
     function getShotMadePercentage(videoId, statsExists) {
         if (!isLoading) {
             if (videoId) {
                 if(statsExists) {
                     return (
                         <div style={{height: "400px"}}>
-                            <CustomPieChart data={dynamicData2}/>
+                            {(numberOfShots === '0') ?
+                                <div style={{
+                                    height: '400px',
+                                    padding: 'inherit',
+                                    display: 'flex',
+                                    justifyContent: 'space-evenly',
+                                    alignContent: 'space-around',
+                                    flexWrap: 'wrap',
+                                    fontSize: 'x-large',
+                                    color: '#603bbb'
+                                }}>No Shots attempted!</div> :
+                                <CustomPieChart data={dynamicData2}/>}
                         </div>
                     )
                 } else {
                     return (
-                        <h1 style={{display: "flex", justifyContent: "center", color: "black"}}>
-                            No Stats Found
-                        </h1>
+                        <div>
+                            {getButton()}
+                        </div>
                     )
                 }
 
@@ -178,6 +225,16 @@ function Video() {
             )
         }
     }
+
+    if (isLoading) {
+        return (
+            <section style={{marginLeft: "45%", marginTop: "15%"}}>
+                <RingLoader color="#603bbb" size={150} />
+            </section>
+        )
+    }
+
+
 
 
 
@@ -208,12 +265,9 @@ function Video() {
     }
 
     const renderVideos = () => {
-        console.log("rendered again")
-        console.log("video file path" + videoFilePath)
         if (videos) {
             return (
-                <Box sx={{display: 'flex', width: '100%', bgcolor: 'background.paper', flex: 1}}>
-                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row'}}>
+                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row', borderRadius: "20px"}}>
                         <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {videos.data.map((video) => {
                                 return (
@@ -228,7 +282,6 @@ function Video() {
                                                    setRecognitionUrl(video.videoClassifyUrl)
                                                    setPersonId(() => {return video.personId===null? "No tracking" : video.personId})
                                                    setVideoId(video.videoId)
-                                                   setStatsExist(video.videoClassifyUrl === null ? false : true);
                                                    getStats(video.videoId);
                                                }}
                                     />
@@ -236,7 +289,6 @@ function Video() {
                             })}
                         </List>
                     </nav>
-                </Box>
             );
         } else {
             return <>
@@ -285,7 +337,7 @@ function Video() {
                             <Grid item xs={4}>
                                 <Typography textAlign={"center"}
                                             sx={{
-                                                color: 'white'
+                                                color: 'black'
                                             }}
                                             variant={"h5"}>
                                     Raw Video
@@ -296,7 +348,7 @@ function Video() {
                             <Grid item xs={4}>
                                 <Typography textAlign={"center"}
                                             sx={{
-                                                color: 'white'
+                                                color: 'black'
                                             }}
                                             variant={"h5"}>
                                     Detection Video
@@ -307,7 +359,7 @@ function Video() {
                             <Grid item xs={4}>
                                 <Typography textAlign={"center"}
                                             sx={{
-                                                color: 'white'
+                                                color: 'black'
                                             }}
                                             variant={"h5"}>
                                     Classification Video

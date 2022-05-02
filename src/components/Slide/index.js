@@ -12,14 +12,15 @@ const Slide = ({src,name,id, setPlayerName, setPlayerId}) => {
         <div onClick={handleOnClick} style={{
             width:"100%",
             height:'600px',
-            background: `no-repeat center/80% url(${src}), rgba(38, 20, 72, 0.9)`,
+            background: `no-repeat center/80% url(${src}), rgba(96, 59, 187, 1)`,
             display:'flex',
             flexDirection:"column",
             placeContent:'end',
-            padding:'10%'
+            padding:'10%',
+            borderRadius: "20px"
         }}>
             <div  style={{
-                background:'black',
+
                 padding:'10px',
                 marginBottom:'10px'
             }}>

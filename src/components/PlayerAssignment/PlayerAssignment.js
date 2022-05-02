@@ -6,6 +6,7 @@ import axios from "axios";
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import {useSnackbar} from "notistack";
+import './PlayerAssignment.css';
 
 let vidUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/";
 let noTracking = 'No tracking';
@@ -62,19 +63,18 @@ function PlayerAssignment(props) {
     function getButton() {
         console.log(props.personId)
 
-
         if (isVideoAndPlayerNotSelected()) {
-            return (<div style={{paddingTop: "25px", color: "white"}}>
+            return (<div style={{paddingTop: "25px", color: "red"}}>
                     A Video And Person Needed To Be Selected First
                 </div>
             )
         } else if (isVideoNotSelected()) {
-            return (<div style={{paddingTop: "25px", color: "white"}}>
+            return (<div style={{paddingTop: "25px", color: "red"}}>
                     Select A Video
                 </div>
             )
         } else if (isVideoNotTracked()) {
-            return (<div style={{paddingTop: "25px", color: "white"}}>
+            return (<div style={{paddingTop: "25px", color: "red"}}>
                     This Video Has No Current Tracking! Select Another One
                 </div>
             )
@@ -84,24 +84,13 @@ function PlayerAssignment(props) {
                 </div>
             )
         } else {
-            return <Button
-
+            return <button
+                className= "assignBtn"
                 variant="contained"
-                style={{
-                    color: "white",
-                    minWidth: '45%',
-                    maxWidth: '45%',
-                    alignSelf: 'center',
-                    marginTop: '25px',
-                    height: '60px',
-                    borderRadius: '30px',
-                    fontSize: '1em',
-                    background: "rgba(38, 20, 72, 0.9)"
-                }}
                 onClick={assign('success')}
             >
                 Assign
-            </Button>;
+            </button>;
         }
     }
 
@@ -121,7 +110,7 @@ function PlayerAssignment(props) {
                             boxSizing: 'border-box',
                             borderRadius: '32.5px',
                             padding: '20px 8px',
-                            alignItems: 'center',
+                            alignItems: 'center'
 
                         }}>
                             <div style={{
