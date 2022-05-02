@@ -59,6 +59,7 @@ const Classify = () => {
                     enqueueSnackbar(videoName+' has been processed!', {variant: "success"})
                 }).catch(() => {
                 setdetectBtnloading(false);
+                enqueueSnackbar(videoName + ' was not processed successfully!', {variant: "error"})
             })
         } else {
             enqueueSnackbar('Another video is being processed!', {variant: "warning"})
@@ -76,6 +77,7 @@ const Classify = () => {
                 enqueueSnackbar(videoName+' has been classified!', {variant: "success"})
             }).catch(() => {
                 setclassifyBtnloading(false);
+                enqueueSnackbar(videoName + ' was not classified successfully!', {variant: "error"})
             })
         } else {
             enqueueSnackbar('Another video is being classified!', {variant: "warning"})
@@ -174,22 +176,25 @@ const Classify = () => {
                         {renderVideos()}
 
                     </div>
-                <Grid style = {{display: 'flex'}} container  marginTop={3} spacing={3}>
+                <Grid style={{display: 'flex', paddingRight: '182px'}} container  marginTop={3} spacing={3}>
                     {
                         videoFilePath &&
                         <>
                             <Grid item xs={10}>
-                                <Typography textAlign={"center"}
-                                            sx={{
-                                                color: 'white'
-                                            }}
-                                            variant={"h5"}>
-                                    Raw Video
-                                </Typography>
-                                <ReactPlayer style={{display: "flex", marginLeft: "37%"}} playing={true} muted={true} width={"50%"} className="player" controls
-                                             url={videoFilePath}/>
+                                <div>
+                                    <Typography textAlign={"left"}
+                                                sx={{
+                                                    marginLeft: '40%',
+                                                    color: '#603bbb'
+                                                }}
+                                                variant={"h5"}>
+                                        Raw Video
+                                    </Typography>
+                                    <ReactPlayer style={{display: "flex", marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
+                                                 url={videoFilePath}/>
+                                </div>
                                 <ThemeProvider theme={theme}>
-                                    <Stack style={{justifyContent: "center", marginLeft: "25%"}} spacing={2} direction="row">
+                                    <Stack style={{justifyContent: "center", marginLeft: "34%"}} spacing={2} direction="row">
                                         <LoadingButton
                                             size="small"
                                             color={(detectionUrl === null || detectionUrl === "") ? "success" : "error"}
@@ -225,15 +230,16 @@ const Classify = () => {
 
 
                 </Grid>
-                <Grid style = {{display: 'flex', paddingRight:'182px'}} container  marginTop={3} spacing={3}>
+                <Grid style={{display: 'flex', paddingRight: '182px'}} container marginTop={3} spacing={3}>
                 {
                     videoFilePath && detection &&
                     <>
                         <Grid item xs={10}>
                             <div>
-                            <Typography textAlign={"center"}
+                            <Typography textAlign={"left"}
                                         sx={{
-                                            color: 'white'
+                                            marginLeft: '40%',
+                                            color: '#603bbb'
                                         }}
                                         variant={"h5"}>
                                 Detection Video
@@ -253,8 +259,9 @@ const Classify = () => {
                         videoFilePath && classification &&
                         <>
                             <Grid item xs={10}>
-                                <Typography textAlign={"center"}
+                                <Typography textAlign={"left"}
                                             sx={{
+                                                marginLeft: '40%',
                                                 color: 'white'
                                             }}
                                             variant={"h5"}>
@@ -274,9 +281,10 @@ const Classify = () => {
                         videoFilePath && assigned &&
                         <>
                             <Grid item xs={10}>
-                                <Typography textAlign={"center"}
+                                <Typography textAlign={"left"}
                                             sx={{
-                                                color: 'white'
+                                                marginLeft: '40%',
+                                                color: '#603bbb'
                                             }}
                                             variant={"h5"}>
                                     Assigned Video
