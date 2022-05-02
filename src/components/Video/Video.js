@@ -19,6 +19,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import './Video.css';
 import {RingLoader} from "react-spinners";
+import {useSnackbar} from "notistack";
 
 SwiperCore.use([EffectCoverflow, Pagination, Autoplay, Navigation]);
 
@@ -46,6 +47,10 @@ function Video() {
     const [numberOfShots, setNumberOfShots] = useState();
     const [numberOfShotsMade, setNumberOfShotsMade] = useState();
     const [statsExist, setStatsExist] = useState(false);
+
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const {enqueueSnackbar} = useSnackbar();
+
 
     const videoUrl = "https://stats-service-fyp-vira.herokuapp.com/api/v1/object-detections/{videoId}/{detectionTrackingId}/{playerId}";
 
@@ -80,9 +85,20 @@ function Video() {
 
         console.log("Updating stats!!!");
     }
+    useEffect(() => {
+        getStats(videoId)
+    }, [statsExist])
 
-    async function generateStats(){
-        await axios.get(generateUrl + videoId);
+    async function generateStats() {
+        setIsButtonLoading(true);
+        await axios.get(generateUrl + videoId).then(r => {
+            setStatsExist(true);
+            setIsButtonLoading(true);
+            enqueueSnackbar('Stats generated successfully!', {variant: "success"})
+        }).catch(() => {
+            setIsButtonLoading(true);
+            enqueueSnackbar('Error generating stats!', {variant: "error"})
+        })
     }
 
     const dynamicData2 = [
@@ -161,7 +177,7 @@ function Video() {
 
     function getButton() {
         if(detectionUrl && recognitionUrl) {
-            return <button  className="generateBtn" onClick={generateStats}> Generate Stats</button>;
+            return <button className="generateBtn" onClick={generateStats}> {isButtonLoading?'Generating ...':'Generate Stats'}</button>;
         }
         else{
             return <button className="generateBtn" disabled>Not Enough Data</button>;
@@ -174,7 +190,18 @@ function Video() {
                 if(statsExists) {
                     return (
                         <div style={{height: "400px"}}>
-                            <CustomPieChart data={dynamicData2}/>
+                            {(numberOfShots === '0') ?
+                                <div style={{
+                                    height: '400px',
+                                    padding: 'inherit',
+                                    display: 'flex',
+                                    justifyContent: 'space-evenly',
+                                    alignContent: 'space-around',
+                                    flexWrap: 'wrap',
+                                    fontSize: 'x-large',
+                                    color: '#603bbb'
+                                }}>No Shots attempted!</div> :
+                                <CustomPieChart data={dynamicData2}/>}
                         </div>
                     )
                 } else {

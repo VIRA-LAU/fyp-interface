@@ -56,6 +56,7 @@ const Classify = () => {
             axios.get(`http://localhost:8000/api/v1/public/process-videoUrl/` + videoName).then(r => {
                     console.log(r);
                     setdetectBtnloading(false);
+                    enqueueSnackbar(videoName+' has been processed!', {variant: "success"})
                 }).catch(() => {
                 setdetectBtnloading(false);
             })
@@ -72,6 +73,7 @@ const Classify = () => {
             axios.get(`http://localhost:9000/api/v1/public/classify-videoUrl/` + videoName).then(r => {
                 console.log(r);
                 setclassifyBtnloading(false);
+                enqueueSnackbar(videoName+' has been classified!', {variant: "success"})
             }).catch(() => {
                 setclassifyBtnloading(false);
             })
@@ -190,14 +192,14 @@ const Classify = () => {
                                     <Stack style={{justifyContent: "center", marginLeft: "25%"}} spacing={2} direction="row">
                                         <LoadingButton
                                             size="small"
-                                            color={detectionUrl === null ? "success" : "error"}
+                                            color={(detectionUrl === null || detectionUrl === "") ? "success" : "error"}
                                             onClick={detectionClick}
                                             loading={videoName === detectVideo ? detectBtnloading : false}
                                             loadingPosition="start"
                                             startIcon={<SendIcon/>}
                                             variant="contained"
                                             style={{width: '20%'}}
-                                            disabled={detectionUrl === null ? false : true}
+                                            disabled={(detectionUrl === null || detectionUrl === "") ? false : true}
                                         >
                                             Object Detection
                                         </LoadingButton>
