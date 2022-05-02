@@ -86,16 +86,15 @@ const Stats = () => {
     }
     const getStats = async (playerId) => {
         var statsPerVideo = await axios.get(statsUrl + playerId)
-        setShootingPercentage(statsPerVideo.data.shootingPercentage)
-        setDribblePercentage(statsPerVideo.data.dribblePercentage)
-        setNoActionPercentage(statsPerVideo.data.noActionPercentage)
-        setBallInHandPercentage(statsPerVideo.data.ballInHandPercentage)
+        setShootingPercentage(Math.round(statsPerVideo.data.shootingPercentage * 1000) / 1000)
+        setDribblePercentage(Math.round(statsPerVideo.data.dribblePercentage * 1000) / 1000)
+        setNoActionPercentage(Math.round(statsPerVideo.data.noActionPercentage * 1000) / 1000)
+        setBallInHandPercentage(Math.round(statsPerVideo.data.ballInHandPercentage * 1000) / 1000)
+        setFieldGoalPrecentage(Math.round(statsPerVideo.data.fieldGoalPrecentage * 1000) / 1000)
+        setNumberOfShots(Math.round(statsPerVideo.data.numberOfShots * 1000) / 1000)
+        setNumberOfShotsMade(Math.round(statsPerVideo.data.numberOfShotsMade * 1000) / 1000)
 
-        setFieldGoalPrecentage(statsPerVideo.data.fieldGoalPrecentage)
-        setNumberOfShots(statsPerVideo.data.numberOfShots)
-        setNumberOfShotsMade(statsPerVideo.data.numberOfShotsMade)
-
-        //console.log(statsPerVideo)
+        console.log(statsPerVideo)
     }
 
     const dynamicData2 = [
