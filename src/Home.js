@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar/Navbar";
 const Home = () => {
     let navigate = useNavigate();
     return (
-        <section className="home">
+        <section className="home2">
            <Navbar/>
             <Video/>
         </section>

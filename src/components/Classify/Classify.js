@@ -16,7 +16,7 @@ import {RingLoader} from "react-spinners";
 
 
 const Classify = () => {
-    const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Videos-Info";
+    const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/Get-Unprocessed";
 
     const [loadedVideos, setLoadedVideos] = useState();
     const [videoName, setVideoName] = useState();
@@ -56,8 +56,10 @@ const Classify = () => {
             axios.get(`http://localhost:8000/api/v1/public/process-videoUrl/` + videoName).then(r => {
                     console.log(r);
                     setdetectBtnloading(false);
+                    enqueueSnackbar(videoName+' has been processed!', {variant: "success"})
                 }).catch(() => {
                 setdetectBtnloading(false);
+                enqueueSnackbar(videoName + ' was not processed successfully!', {variant: "error"})
             })
         } else {
             enqueueSnackbar('Another video is being processed!', {variant: "warning"})
@@ -72,8 +74,10 @@ const Classify = () => {
             axios.get(`http://localhost:9000/api/v1/public/classify-videoUrl/` + videoName).then(r => {
                 console.log(r);
                 setclassifyBtnloading(false);
+                enqueueSnackbar(videoName+' has been classified!', {variant: "success"})
             }).catch(() => {
                 setclassifyBtnloading(false);
+                enqueueSnackbar(videoName + ' was not classified successfully!', {variant: "error"})
             })
         } else {
             enqueueSnackbar('Another video is being classified!', {variant: "warning"})
@@ -108,17 +112,17 @@ const Classify = () => {
         }
     });
 
-
-
     const renderVideos = () => {
         console.log("rendered again")
         console.log("video file path" + videoFilePath)
         if (loadedVideos) {
             return (
-                <Box sx={{display: 'flex', width: '100%', minWidth: 250, bgcolor: 'background.paper'}}>
+                <div
 
-                    <nav aria-label="main mailbox folders" style={{flexDirection: 'row'}}>
-                        <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
+                >
+
+                <nav aria-label="main mailbox folders" style={{flexDirection: 'row', borderRadius: "20px", display: "flex", width: "1000px"}}>
+                    <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {loadedVideos.data.map((video) => {
                                 return (
                                     <VideoItem key={video.videoId} videoId={video.videoId} videoName={video.videoName}
@@ -134,16 +138,14 @@ const Classify = () => {
                                                    setDetectionUrl(video.videoDetectUrl)
                                                    setRecognitionUrl(video.videoClassifyUrl)
 
-                                                   console.log("video clicked is " + video.videoName)
-                                                   console.log("detection", detection)
-
                                                }}
                                     />
                                 );
                             })}
                         </List>
                     </nav>
-                </Box>
+
+                </div>
             );
         } else {
             return <>
@@ -154,51 +156,55 @@ const Classify = () => {
     if (isLoading) {
         return (
             <section style={{marginLeft: "45%", marginTop: "15%"}}>
-                {/*<p>Loading ...</p>*/}
                 <RingLoader color="#603bbb" size={150} />
             </section>
         )
     }
 
     return (
-        <section className="home">
+        <div>
             <Navbar/>
             <div>
-                <Grid container  marginTop={2} spacing={3}>
+
+
                     <div style={{
-                        display: 'flex'
+                        display: 'flex',
+                        paddingTop: "35px",
+                        justifyContent: "center"
                     }}>
-
-
 
                         {renderVideos()}
 
                     </div>
+                <Grid style={{display: 'flex', paddingRight: '182px'}} container  marginTop={3} spacing={3}>
                     {
                         videoFilePath &&
                         <>
                             <Grid item xs={10}>
-                                <Typography textAlign={"center"}
-                                            sx={{
-                                                color: 'white'
-                                            }}
-                                            variant={"h5"}>
-                                    Raw Video
-                                </Typography>
-                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
-                                             url={videoFilePath}/>
+                                <div>
+                                    <Typography textAlign={"left"}
+                                                sx={{
+                                                    marginLeft: '40%',
+                                                    color: '#603bbb'
+                                                }}
+                                                variant={"h5"}>
+                                        Raw Video
+                                    </Typography>
+                                    <ReactPlayer style={{display: "flex", marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
+                                                 url={videoFilePath}/>
+                                </div>
                                 <ThemeProvider theme={theme}>
-                                    <Stack style={{justifyContent: "center"}} spacing={2} direction="row">
+                                    <Stack style={{justifyContent: "center", marginLeft: "34%"}} spacing={2} direction="row">
                                         <LoadingButton
                                             size="small"
-                                            color={detectionUrl === null ? "success" : "error"}
+                                            color={(detectionUrl === null || detectionUrl === "") ? "success" : "error"}
                                             onClick={detectionClick}
                                             loading={videoName === detectVideo ? detectBtnloading : false}
                                             loadingPosition="start"
                                             startIcon={<SendIcon/>}
                                             variant="contained"
                                             style={{width: '20%'}}
-                                            disabled={detectionUrl === null ? false : true}
+                                            disabled={(detectionUrl === null || detectionUrl === "") ? false : true}
                                         >
                                             Object Detection
                                         </LoadingButton>
@@ -224,21 +230,22 @@ const Classify = () => {
 
 
                 </Grid>
-                <Grid style = {{display: 'flex', justifyContent: 'end', paddingRight:'115px'}} container  marginTop={3} spacing={3}>
+                <Grid style={{display: 'flex', paddingRight: '182px'}} container marginTop={3} spacing={3}>
                 {
                     videoFilePath && detection &&
                     <>
                         <Grid item xs={10}>
                             <div>
-                            <Typography textAlign={"center"}
+                            <Typography textAlign={"left"}
                                         sx={{
-                                            color: 'white'
+                                            marginLeft: '40%',
+                                            color: '#603bbb'
                                         }}
                                         variant={"h5"}>
                                 Detection Video
                             </Typography>
 
-                            <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                            <ReactPlayer style={{marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
                                          url={detection}/>
                             </div>
                         </Grid>
@@ -247,19 +254,20 @@ const Classify = () => {
 
                 </Grid>
 
-                <Grid style = {{display: 'flex', justifyContent: 'end', paddingRight:'115px'}}  container marginTop={3} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'182px'}}  container marginTop={3} spacing={3}>
                     {
                         videoFilePath && classification &&
                         <>
                             <Grid item xs={10}>
-                                <Typography textAlign={"center"}
+                                <Typography textAlign={"left"}
                                             sx={{
+                                                marginLeft: '40%',
                                                 color: 'white'
                                             }}
                                             variant={"h5"}>
                                     Classification Video
                                 </Typography>
-                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                <ReactPlayer style={{marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
                                              url={classification}/>
                             </Grid>
                         </>
@@ -268,19 +276,20 @@ const Classify = () => {
                 </Grid>
 
 
-                <Grid style = {{display: 'flex', justifyContent: 'end', paddingRight:'115px'}}  container marginTop={5} spacing={3}>
+                <Grid style = {{display: 'flex', paddingRight:'182px'}}  container marginTop={5} spacing={3}>
                     {
                         videoFilePath && assigned &&
                         <>
                             <Grid item xs={10}>
-                                <Typography textAlign={"center"}
+                                <Typography textAlign={"left"}
                                             sx={{
-                                                color: 'white'
+                                                marginLeft: '40%',
+                                                color: '#603bbb'
                                             }}
                                             variant={"h5"}>
                                     Assigned Video
                                 </Typography>
-                                <ReactPlayer playing={true} muted={true} width={"100%"} className="player" controls
+                                <ReactPlayer style={{marginLeft: "40%"}} playing={true} muted={true} width={"55%"} className="player" controls
                                              url={assigned}/>
                             </Grid>
                         </>
@@ -291,7 +300,7 @@ const Classify = () => {
 
 
             </div>
-        </section>
+        </div>
 
     );
 };

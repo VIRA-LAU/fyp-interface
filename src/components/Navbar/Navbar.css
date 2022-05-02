@@ -1,7 +1,7 @@
 nav {
     background: #603bbb;
     width: 100%;
-    padding: 20px 40px;
+    padding: 5px 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -12,7 +12,11 @@ h2 {
 }
 
 nav button {
-    width: 86px;
-    padding: 8px 0;
-    background: #3a2b58;
+    width: 100px;
+    border-radius: 20px;
+    font-size: 1.5em;
+}
+
+button:hover{
+    background-color: #573593;
 }

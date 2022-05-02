@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import CustomPieChart from "../charts/pieChart/index";
 import Navbar from "../Navbar/Navbar";
+import {RingLoader} from "react-spinners";
 
 const Stats = () => {
 
@@ -51,13 +52,10 @@ const Stats = () => {
         // you set the new parameters zena
         // setFirstName () , lastNAme
         // call for endpoints to get statsics
-
-        setLoading(true)
         //console.log(loading)
         var statPerPlayerForAllVideo = await axios.get(statsUrl + playerId).catch(function (e){
             //console.log("No Stats Found")
-            setLoading(false)
-            setStatExist(false)
+            setLoading(false);
         })
         //console.log(statPerPlayerForAllVideo.status)
         if(statPerPlayerForAllVideo.status == 200){
@@ -287,8 +285,16 @@ const Stats = () => {
 
     }
 
+    if (loading) {
+        return (
+            <section style={{marginLeft: "45%", marginTop: "15%"}}>
+                <RingLoader color="#603bbb" size={150} />
+            </section>
+        )
+    }
+
     return (
-        <section className="home">
+        <section className="home2">
             <Navbar />
 
             <div style={{color: "white", display: "flex", justifyContent: "center", paddingTop: "15px"}}>
