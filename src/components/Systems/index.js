@@ -52,7 +52,7 @@ const Systems = () => {
 
             <div style={{ height: 450, width: '100%', marginTop: 16, color: 'black'}}>
       
-            <DataGrid style={{color: 'black', backgroundColor: "rgba(176,175,175,0.8)"}}
+            <DataGrid style={{color: 'black'}}
             
                 rows={rows}
                 columns={columns}
