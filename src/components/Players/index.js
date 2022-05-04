@@ -6,7 +6,7 @@ import fire from "../../fire";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {RingLoader} from 'react-spinners';
-import Navbar from "../Navbar/Navbar";
+import Navbar from "../Navbar/Navbar"; 
 
 const Players = () => {
     const url = "https://stats-service-fyp-vira.herokuapp.com/api/v1/players"
@@ -49,7 +49,7 @@ const Players = () => {
     function uploadImage(img) {
         console.log("Image name: " + img.name);
         const storageRef = ref(storage, `/images/${img.name}`)
-        const uploadTask = uploadBytesResumable(storageRef, img);
+        const uploadTask = uploadBytesResumable(storageRef, img); 
         const playersCollection = collection(db, '/players');
         uploadTask.on("state_changed", (snapshot) => {
                 progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;

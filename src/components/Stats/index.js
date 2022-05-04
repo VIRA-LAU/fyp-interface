@@ -8,8 +8,9 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import CustomPieChart from "../charts/pieChart/index";
-import Navbar from "../Navbar/Navbar";
-import {RingLoader} from "react-spinners";
+import Navbar from "../Navbar/Navbar"; 
+import {RingLoader} from "react-spinners"; 
+
 
 const Stats = () => {
 
@@ -98,14 +99,14 @@ const Stats = () => {
 
     const dynamicData2 = [
         {
-            "id": "numberOfShotsMissed",
-            "label": "numberOfShotsMissed",
+            "id": "Shots Missed",
+            "label": "Shots Missed",
             "value": numberOfShots-numberOfShotsMade,
             "color": "hsl(181, 12%, 50%)"
         },
         {
-            "id": "numberOfShotsMade",
-            "label": "numberOfShotsMade",
+            "id": "Shots Made",
+            "label": "Shots Made",
             "value": numberOfShotsMade,
             "color": "hsl(181, 12%, 50%)"
         },
@@ -115,26 +116,26 @@ const Stats = () => {
 
     const dynamicData1 = [
         {
-            "id": "shootingPercentange",
-            "label": "shootingPercentange",
+            "id": "Shooting Percentage",
+            "label": "Shooting Percentage",
             "value": shootingPercentage,
             "color": "hsl(177, 70%, 50%)"
         },
         {
-            "id": "dribblePercentage",
-            "label": "dribblePercentage",
+            "id": "Dribbling Percentage",
+            "label": "Dribbling Percentage",
             "value": dribblePercentage,
             "color": "hsl(172, 70%, 50%)"
         },
         {
-            "id": "NoActionPercentage",
-            "label": "NoActionPercentage",
+            "id": "No-Action Percentage",
+            "label": "No-Action Percentage",
             "value": noActionPercentage,
             "color": "hsl(181, 12%, 50%)"
         },
         {
-            "id": "ballInHandPercentage",
-            "label": "ballInHandPercentage  ",
+            "id": "Ball-In-Hand Percentage",
+            "label": "Ball-In-Hand Percentage  ",
             "value": ballInHandPercentage,
             "color": "hsl(172, 32%, 50%)"
         }
@@ -180,7 +181,7 @@ const Stats = () => {
                 setEmail(player.email)
                 setFirstName(player.firstName)
                 setLastName(player.lastName)
-                setImageUrl(player.imageUrl)
+                setImageUrl(player.imageUrl)  
             }
         })
         //console.log(responseList)
@@ -260,7 +261,7 @@ const Stats = () => {
 
                         <div style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center"}}>
 
-                                <img src={imageUrl} className="playerImg"></img>
+                                <img class="lazyload" src={imageUrl} className="playerImg"></img>
 
                             <div className="dataContainer" style={{marginBottom: "25%"}}>
                                 <div><b>First Name:</b> {firstName}</div>

@@ -29,10 +29,10 @@ const Systems = () => {
     },[systems.length])
     
     const columns = [
-        { field: 'roverName', headerName: 'Rover Name', width: 310 },
-        { field: 'cameraName', headerName: 'Camera Name', width: 310 },
-        { field: 'imageQuality', headerName: 'Image Quality', width: 310 },
-        { field: 'numberOfVideos', headerName: 'Number of Videos', width: 310 },
+        { field: 'roverName', headerName: <b>Rover Name</b>, width: 310 },
+        { field: 'cameraName', headerName: <b>Camera Name</b>, width: 310 },
+        { field: 'imageQuality', headerName: <b>Image Quality</b>, width: 310 },
+        { field: 'numberOfVideos', headerName: <b>Number of Videos</b>, width: 310 },
     ];
 
 
@@ -51,7 +51,8 @@ const Systems = () => {
             <Navbar />
 
             <div style={{ height: 450, width: '100%', marginTop: 16, color: 'black'}}>
-            <DataGrid style={{color: 'black', backgroundColor: "rgba(176,175,175,0.8)"}}
+            <DataGrid style={{color: 'white', backgroundColor: "#42028A"}}  //BBADFF - Black
+                                                                            //42028A - White
                 rows={rows}
                 columns={columns}
                 pageSize={5}

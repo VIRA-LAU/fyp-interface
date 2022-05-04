@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Button} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faPencil} from "@fortawesome/free-solid-svg-icons/faPencil";
-
+import {faPencil} from "@fortawesome/free-solid-svg-icons/faPencil"; 
+import Resizer from "react-image-file-resizer";
 
 function ImageUpload(props){
     const [file, setFile]=useState();
@@ -22,9 +22,13 @@ function ImageUpload(props){
     function pickedHandler(event){
         let pickedFile;
         if(event.target.files && event.target.files.length===1){
-            pickedFile=event.target.files[0];
+            pickedFile=event.target.files[0]; 
+            if(pickedFile.size > 4194304){ //x*1024*1024 --> x MB 
+                alert("The file you want to upload is too big. Maximum Upload Size = 4 MB");
+            }else{
             setFile(pickedFile);
             props.setImg(pickedFile);
+            }
         }
     }
 
