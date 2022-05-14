@@ -12,7 +12,7 @@ const Slide = ({src,name,id, setPlayerName, setPlayerId}) => {
         <div onClick={handleOnClick} style={{
             width:"100%",
             height:'600px',
-            background: `no-repeat center/80% url(${src}), rgba(96, 59, 187, 1)`,
+            background: `no-repeat center/80% url(${src}), #FFEBDF  `,
             display:'flex',
             flexDirection:"column",
             placeContent:'end',
@@ -24,7 +24,7 @@ const Slide = ({src,name,id, setPlayerName, setPlayerId}) => {
                 padding:'10px',
                 marginBottom:'10px'
             }}>
-                <Typography textAlign={"center"} sx={{color:'white'}} variant={"h5"}>
+                <Typography textAlign={"center"} sx={{color:'black'}} variant={"h5"}>
                     {name}
                 </Typography>
             </div>

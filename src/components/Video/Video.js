@@ -199,7 +199,7 @@ function Video() {
                                     alignContent: 'space-around',
                                     flexWrap: 'wrap',
                                     fontSize: 'x-large',
-                                    color: '#603bbb'
+                                    color: '#FEB993'
                                 }}>No Shots attempted!</div> :
                                 <CustomPieChart data={dynamicData2}/>}
                         </div>
@@ -229,7 +229,7 @@ function Video() {
     if (isLoading) {
         return (
             <section style={{marginLeft: "45%", marginTop: "15%"}}>
-                <RingLoader color="#603bbb" size={150} />
+                <RingLoader color="#FEB993" size={150} />
             </section>
         )
     }

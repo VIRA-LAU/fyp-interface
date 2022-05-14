@@ -17,10 +17,10 @@
     height: 60px;
     border-radius: 30px;
     font-size: 1em;
-    background-color: #603bbb;
+    background-color: #FEA860;
 }
 .generateBtn:hover {
-    background-color: #3a2b58;
+    background-color: #FEB993;
 }
 
 .generateBtn:disabled {

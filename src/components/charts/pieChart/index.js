@@ -16,7 +16,7 @@ const CustomPieChart = ({ data /* see data tab */ }) => (
         padAngle={0.7}
         cornerRadius={3}
 
-        colors={{ scheme: 'purple_orange' }}
+        colors={{ scheme: 'spectral' }}
         activeOuterRadiusOffset={8}
         borderWidth={1}
         borderColor={{
@@ -29,7 +29,7 @@ const CustomPieChart = ({ data /* see data tab */ }) => (
             ]
         }}
         arcLinkLabelsSkipAngle={10}
-        arcLinkLabelsTextColor="#603bbb"
+        arcLinkLabelsTextColor="black"
         arcLinkLabelsThickness={2}
         arcLinkLabelsColor={{ from: 'color' }}
         arcLabelsSkipAngle={10}
@@ -114,7 +114,7 @@ const CustomPieChart = ({ data /* see data tab */ }) => (
                 itemsSpacing: 5,
                 itemWidth: 100,
                 itemHeight: 18,
-                itemTextColor: '#603bbb',
+                itemTextColor: 'black',
                 itemDirection: 'left-to-right',
                 itemOpacity: 1,
                 symbolSize: 18,

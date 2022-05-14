@@ -42,7 +42,7 @@ const Systems = () => {
     if (isLoading) {
         return (
             <section style={{marginLeft: "45%", marginTop: "15%"}}>
-                <RingLoader color="#603bbb" size={150} />
+                <RingLoader color="#FEB993" size={150} />
             </section>
         )
     }
@@ -51,7 +51,7 @@ const Systems = () => {
             <Navbar />
 
             <div style={{ height: 450, width: '100%', marginTop: 16, color: 'black'}}>
-            <DataGrid style={{color: 'black', backgroundColor: "rgba(176,175,175,0.8)"}}
+            <DataGrid style={{color: 'black', backgroundColor: "#FFDBC6"}}
                 rows={rows}
                 columns={columns}
                 pageSize={5}

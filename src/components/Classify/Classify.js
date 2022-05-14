@@ -2,7 +2,6 @@ import Navbar from "../Navbar/Navbar";
 import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {Grid, List, Stack, ThemeProvider, Typography} from "@mui/material";
-import Box from "@mui/material/Box";
 import VideoItem from "../Videos/VideoItem";
 import ReactPlayer from "react-player";
 import SendIcon from '@mui/icons-material/Send';
@@ -10,8 +9,6 @@ import {LoadingButton} from "@mui/lab";
 import {createTheme} from '@material-ui/core/styles'
 import {useSnackbar} from "notistack";
 import ButtonsContext from "./ButtonsContext";
-import CustomPieChart from "../charts/pieChart";
-import CircularProgress from "@mui/material/CircularProgress";
 import {RingLoader} from "react-spinners";
 
 
@@ -121,7 +118,7 @@ const Classify = () => {
 
                 >
 
-                <nav aria-label="main mailbox folders" style={{flexDirection: 'row', borderRadius: "20px", display: "flex", width: "1000px"}}>
+                <nav aria-label="main mailbox folders" style={{background: '#FEC493', flexDirection: 'row', borderRadius: "20px", display: "flex", width: "1000px"}}>
                     <List style={{overflow: 'auto', display: 'flex', flexDirection: 'row'}}>
                             {loadedVideos.data.map((video) => {
                                 return (
@@ -156,7 +153,7 @@ const Classify = () => {
     if (isLoading) {
         return (
             <section style={{marginLeft: "45%", marginTop: "15%"}}>
-                <RingLoader color="#603bbb" size={150} />
+                <RingLoader color="#FEB993  " size={150} />
             </section>
         )
     }
@@ -185,7 +182,7 @@ const Classify = () => {
                                     <Typography textAlign={"left"}
                                                 sx={{
                                                     marginLeft: '40%',
-                                                    color: '#603bbb'
+                                                    color: '#FE8C2D'
                                                 }}
                                                 variant={"h5"}>
                                         Raw Video
@@ -239,7 +236,7 @@ const Classify = () => {
                             <Typography textAlign={"left"}
                                         sx={{
                                             marginLeft: '40%',
-                                            color: '#603bbb'
+                                            color: '#FE8C2D'
                                         }}
                                         variant={"h5"}>
                                 Detection Video
@@ -284,7 +281,7 @@ const Classify = () => {
                                 <Typography textAlign={"left"}
                                             sx={{
                                                 marginLeft: '40%',
-                                                color: '#603bbb'
+                                                color: '#FE8C2D'
                                             }}
                                             variant={"h5"}>
                                     Assigned Video

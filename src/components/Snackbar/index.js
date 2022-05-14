@@ -1,17 +1,13 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import {useSnackbar} from 'notistack';
 
 function CustomSnackBar() {
-    const { enqueueSnackbar } = useSnackbar();
-
-    const handleClick = () => {
-        enqueueSnackbar('I love snacks.');
-    };
+    const {enqueueSnackbar} = useSnackbar();
 
     const handleClickVariant = (variant) => () => {
         // variant could be success, error, warning, info, or default
-        enqueueSnackbar('Player Has Been Assigned!', { variant });
+        enqueueSnackbar('Player Has Been Assigned!', {variant});
     };
 
     return (

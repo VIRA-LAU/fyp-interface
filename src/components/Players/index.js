@@ -50,7 +50,6 @@ const Players = () => {
         console.log("Image name: " + img.name);
         const storageRef = ref(storage, `/images/${img.name}`)
         const uploadTask = uploadBytesResumable(storageRef, img);
-        const playersCollection = collection(db, '/players');
         uploadTask.on("state_changed", (snapshot) => {
                 progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log(progress);

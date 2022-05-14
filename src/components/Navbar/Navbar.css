@@ -1,5 +1,5 @@
 nav {
-    background: #603bbb;
+    background: #FEA860;
     width: 100%;
     padding: 5px 10px;
     display: flex;
@@ -8,15 +8,16 @@ nav {
 }
 
 h2 {
-    color: #fff;
+    color: #fff7E0;
 }
 
 nav button {
     width: 100px;
     border-radius: 20px;
     font-size: 1.5em;
+    background-color: #FEA860;
 }
 
 button:hover{
-    background-color: #573593;
+    background-color: #FFA071;
 }
